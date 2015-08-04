@@ -13,32 +13,32 @@
 		</tr>
 
 		{% for issue in current %}
-		<tr>
+		<tr id="r{{issue.id}}">
 			<td class='seriesTitle'>
 				<a href="../series/{{issue.series.id}}">
 					{{issue.series}}
 				</a>
 			</td>
-		<td>
-			<a href='issue/{{issue.id}}'>
-				{{issue.issue_number}}
-			</a>
-		</td>			
-		<td>{{issue.release_date}}</td>
-		<td>
-			{% if issue.publisher != None %}
-				{{issue.publisher}}
-			{% else %}
-				{% if issue.series.publisher != None %}
-					{{issue.series.publisher}}
-				{% endif %}
-			{% endif %}
-		</td>
-		{% if wantlist %}
 			<td>
-				<a href="../issue/{{issue.id}}/own" class="btn btn-xs btn-default" role="button">Bought</a>
+				<a href='issue/{{issue.id}}'>
+					{{issue.issue_number}}
+				</a>
+			</td>			
+			<td>{{issue.release_date}}</td>
+			<td>
+				{% if issue.publisher != None %}
+					{{issue.publisher}}
+				{% else %}
+					{% if issue.series.publisher != None %}
+						{{issue.series.publisher}}
+					{% endif %}
+				{% endif %}
 			</td>
-		{% endif %}
+			{% if wantlist %}
+				<td>
+					<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-default btn-xs" onclick="buy({{issue.id}});" />
+				</td>
+			{% endif %}
 		</tr>
 		{% endfor %}
 	</table>		
