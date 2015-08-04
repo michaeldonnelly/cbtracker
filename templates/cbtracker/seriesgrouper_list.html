@@ -1,0 +1,14 @@
+{% extends "cbtracker/base.html" %}
+
+{% block content %}
+<ul>
+	{% for seriesGrouper in list %}
+	<li>
+		<a href="{{seriesGrouper.id}}">
+			{{seriesGrouper.name}}
+		</a>
+	</li>
+	{% endfor %}
+</ul>
+
+{% endblock %}

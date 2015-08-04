@@ -6,12 +6,12 @@ from django.template import RequestContext
 from django.db.models import Q
 from itertools import chain
 
-from comicbooks.models import Issue, Series, SeriesGrouper, Author, List
-from comicbooks.forms import IssueForm
+from cbtracker.models import Issue, Series, SeriesGrouper, Author, List
+from cbtracker.forms import IssueForm
 
 class Wantlist(ListView):
 	model = Issue
-	template = 'comicbooks/issue_list.html'
+	template = 'cbtracker/issue_list.html'
 	
 	def get_context_data(self, **kwargs):
 		context = super(Wantlist, self).get_context_data(**kwargs)
@@ -147,7 +147,7 @@ def issue_form_upload(request):
 		if form.is_valid():
 			issue = form.save()
 			return HttpResponseRedirect('series/' + str(issue.series.id))
-	return render(request, 'comicbooks/issue_form_upload.html', {
+	return render(request, 'cbtracker/issue_form_upload.html', {
 		'form': form,
 	})
 
@@ -226,7 +226,7 @@ def issue(request, issue_id='', series_id='', author_id='', list_id=''):
 			'price_source': price_source,
 			'author': author,
 		})
-	return render(request, 'comicbooks/issue_form.html', {'form': form,}, context)
+	return render(request, 'cbtracker/issue_form.html', {'form': form,}, context)
 
 def issueOwn(request, issue_id):
 	issue = Issue.objects.get(pk=issue_id)
@@ -248,7 +248,8 @@ def bought(request, issue_id):
 	
 	
 def index(request):
-    return HttpResponse("Hello, world. You're at the comicbook index.")
+	return HttpResponseRedirect('wantlist')		
+    #return HttpResponse("Hello, world. You're at the comicbook index.")
     
 def wantlist(request):
 	return "foo"

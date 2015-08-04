@@ -8,7 +8,7 @@ class Series(models.Model):
 	volume = models.IntegerField(null=True, blank=True)
 	publisher = models.ForeignKey('Publisher', null=True, blank=True)
 	start_year = models.IntegerField()
-	current = models.BooleanField()
+	current = models.BooleanField(default=False)
 	seriesGrouper = models.ForeignKey('SeriesGrouper', null=True, blank=True)
 	#def made():
 	#	return datetime.datetime(2015,7,10,16,24)

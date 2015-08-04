@@ -1,0 +1,13 @@
+{% extends "cbtracker/base.html" %}
+
+{% block content %}
+
+<h2>Pablo, honey</h2>
+
+<form action="issue_form_upload.html" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
