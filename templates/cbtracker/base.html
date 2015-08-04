@@ -48,16 +48,16 @@
 							<a href="{% url 'wantlist' %}">Want List</a> 
 						</li>
             <li>
-							<a href="/comics/picklist">Current Series</a>
+							<a href="{% url 'picklist' %}">Current Series</a>
 						</li> 
 						<li {%if serieslist%}class="active"{%endif%}>							
-							<a href="/comics/series">All Series</a>
+							<a href="{% url 'series_list' %}">All Series</a>
 						</li>
             <li {%if seriesgrouplist%}class="active"{%endif%}>					
-							<a href="/comics/seriesGroup">Series Groups</a> 	
+							<a href="{% url 'series_grouper_list' %}">Series Groups</a> 	
 						</li>
             <li {%if authorlist%}class="active"{%endif%}>							
-							<a href="/comics/author">Authors</a> 		
+							<a href="{% url 'author_list' %}">Authors</a> 		
 						</li>
 						<li>
 							<a href="issue/add" class="btn btn-default" role="button">Add New Issue</a>
