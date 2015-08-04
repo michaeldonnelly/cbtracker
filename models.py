@@ -3,28 +3,22 @@ import datetime
 
 class Series(models.Model):
 	name = models.CharField(max_length=200)
-	#sort_name = models.CharField(max_length=200, default='zzz')
+	sort_name = models.CharField(max_length=200)
 	author = models.ForeignKey('Author', null=True, blank=True)
 	volume = models.IntegerField(null=True, blank=True)
 	publisher = models.ForeignKey('Publisher', null=True, blank=True)
 	start_year = models.IntegerField()
 	current = models.BooleanField(default=False)
 	seriesGrouper = models.ForeignKey('SeriesGrouper', null=True, blank=True)
-	#def made():
-	#	return datetime.datetime(2015,7,10,16,24)
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
 	
 	def latest_issue(self):
 		return Issue.objects.filter(series=self).first()
 	
-	def latest_issue_id(self):
-		issue = Issue.objects.filter(series=self).first()
-		return 222
-	
 	class Meta:
 		verbose_name_plural = 'series'
-		ordering = ['name', 'start_year']
+		ordering = ['sort_name', 'start_year']
 		
 	def __str__(self):
 		return self.name + ' (' + str(self.start_year) + ')'
