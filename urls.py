@@ -5,7 +5,6 @@ from . import views, forms
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^wantlist/$', views.Wantlist.as_view(), name='wantlist'),
-    url(r'^wantlist/$', views.Wantlist.as_view(), name='wantlist'),
     url(r'^picklist/$', views.Picklist.as_view(), name='picklist'),
     url(r'^series/$', views.SeriesList.as_view(), name='series_list'),
 	url(r'^series/(?P<series_id>\d+)/$', views.IssueList.as_view(), name='issues_by_series'),
