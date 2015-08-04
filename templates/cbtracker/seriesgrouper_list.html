@@ -4,7 +4,7 @@
 <ul>
 	{% for seriesGrouper in list %}
 	<li>
-		<a href="{{seriesGrouper.id}}">
+		<a href="{% url 'issues_by_group' seriesGrouper_id=seriesGrouper.id %}">
 			{{seriesGrouper.name}}
 		</a>
 	</li>

@@ -31,7 +31,8 @@
   </head>
   <body role="document">
 		
-   	<nav class="navbar navbar-fixed-top navbar-inverse">
+   	<!--<nav class="navbar navbar-fixed-top navbar-inverse">-->
+   	<nav class="navbar navbar-fixed-top navbar-default">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -40,45 +41,36 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Comic Book Tracker</a>
+          <a class="navbar-brand" href="{% url 'index' %}">Comic Book Tracker</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li {%if wantlist%}class="active"{%endif%}>
-							<a href="{% url 'wantlist' %}">Want List</a> 
-						</li>
+				<a href="{% url 'wantlist' %}">Want List</a> 
+			</li>
             <li>
-							<a href="{% url 'picklist' %}">Current Series</a>
-						</li> 
-						<li {%if serieslist%}class="active"{%endif%}>							
-							<a href="{% url 'series_list' %}">All Series</a>
-						</li>
+				<a href="{% url 'picklist' %}">Current Series</a>
+			</li> 
+			<li {%if serieslist%}class="active"{%endif%}>							
+				<a href="{% url 'series_list' %}">All Series</a>
+			</li>
             <li {%if seriesgrouplist%}class="active"{%endif%}>					
-							<a href="{% url 'series_grouper_list' %}">Series Groups</a> 	
-						</li>
+				<a href="{% url 'series_grouper_list' %}">Series Groups</a> 	
+			</li>
             <li {%if authorlist%}class="active"{%endif%}>							
-							<a href="{% url 'author_list' %}">Authors</a> 		
-						</li>
-						<li>
-							<a href="issue/add" class="btn btn-default" role="button">Add New Issue</a>
-						</li>
+				<a href="{% url 'author_list' %}">Authors</a> 		
+			</li>
+			<li>
+				<a href="{% url 'add_issue' %}?{{ addIssueQueryParams }}" class="btn btn-default" role="button">Add New Issue</a>
+			</li>
           </ul>
-					
-					<!--
-					<ul class="navbar-form navbar-right">
-						<li>
-							<a href="issue/add" class="btn btn-default" role="button">Add New Issue</a>
-						</li>
-					</ul>
-					-->
         </div><!--/.nav-collapse -->
-
-			</div>
+      </div>
     </nav>
 		
-		<div class="container">
-		{% block content %}{% endblock %}
-		</div>
+	<div class="container">
+	{% block content %}{% endblock %}
+	</div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

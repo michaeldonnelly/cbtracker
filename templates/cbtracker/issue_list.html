@@ -15,12 +15,12 @@
 		{% for issue in current %}
 		<tr id="r{{issue.id}}">
 			<td class='seriesTitle'>
-				<a href="../series/{{issue.series.id}}">
+				<a href="{% url 'issues_by_series' series_id=issue.series.id %}">
 					{{issue.series}}
 				</a>
 			</td>
 			<td>
-				<a href='issue/{{issue.id}}'>
+				<a href="{% url 'issue' issue_id=issue.id %}">
 					{{issue.issue_number}}
 				</a>
 			</td>			
@@ -52,11 +52,13 @@
 				<h2>{{title}}</h2>
 			</div>
 			<div class="col-md-4">
-				<h2>
-					<a href="{% url 'issues_by_author' author_id=series.author.id %}">
-						{{series.author}}
-					</a>
-				</h2>
+				{% if series.author %}
+					<h2>
+						<a href="{% url 'issues_by_author' author_id=series.author.id %}">
+							{{series.author}}
+						</a>
+					</h2>
+				{% endif %}
 			</div>
 			<div class="col-md-4">
 				{% if series.publisher %}
@@ -86,13 +88,13 @@
 	<tr id="r{{issue.id}}" {% if not wantlist and not issue.own %} class='danger' {% endif %}>
 		{% if includeSeriesName %}
 			<td class='seriesTitle'>
-				<a href="../series/{{issue.series.id}}">
+				<a href="{% url 'issues_by_series' series_id=issue.series.id %}">
 					{{issue.series}}
 				</a>
 			</td>
 		{% endif %}
 		<td>
-			<a href='issue/{{issue.id}}'>
+			<a href="{% url 'issue' issue_id=issue.id %}">
 				{{issue.issue_number}}
 			</a>
 		</td>
@@ -122,8 +124,6 @@
 			{% endif %}
 		</td>
 		<td>
-			<!--<a href="../issue/{{issue.id}}/own" class="btn btn-xs btn-default" role="button">Bought</a>
-			<button id="bought" type="button" class="btn btn-default btn-xs">Bought</button>-->
 			<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-default btn-xs" onclick="buy({{issue.id}});" />
 		</td>
 		{% endif %}

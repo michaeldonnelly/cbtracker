@@ -3,7 +3,7 @@ import datetime
 
 class Series(models.Model):
 	name = models.CharField(max_length=200)
-	#sort_name = models.CharField(max_length=200, default=name)
+	#sort_name = models.CharField(max_length=200, default='zzz')
 	author = models.ForeignKey('Author', null=True, blank=True)
 	volume = models.IntegerField(null=True, blank=True)
 	publisher = models.ForeignKey('Publisher', null=True, blank=True)
@@ -17,6 +17,10 @@ class Series(models.Model):
 	
 	def latest_issue(self):
 		return Issue.objects.filter(series=self).first()
+	
+	def latest_issue_id(self):
+		issue = Issue.objects.filter(series=self).first()
+		return 222
 	
 	class Meta:
 		verbose_name_plural = 'series'

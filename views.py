@@ -28,6 +28,46 @@ class Wantlist(ListView):
 
 		return context
 		
+class Picklist(ListView):
+	model = Series
+	def get_context_data(self, **kwargs):
+		context = super(Picklist, self).get_context_data(**kwargs)
+		context['title'] = 'Current Series'
+		marvel = Series.objects.filter(current=True, publisher=1)
+		dc = Series.objects.filter(current=True, publisher__in=(3,4))
+		indy = Series.objects.filter(current=True).exclude(publisher__in=(1,3,4))
+		context['list'] = chain(indy, dc, marvel)
+		context['picklist'] = True
+		return context
+	
+# All Series
+class SeriesList(ListView):
+	model = Series
+	def get_context_data(self, **kwargs):
+		context = super(SeriesList, self).get_context_data(**kwargs)
+		context['title'] = 'Series'
+		context['list'] = Series.objects.all()
+		context['serieslist'] = True
+		return context	
+		
+class SeriesGrouperList(ListView):
+	model = SeriesGrouper
+	def get_context_data(self, **kwargs):
+		context = super(SeriesGrouperList, self).get_context_data(**kwargs)
+		context['title'] = 'Series Groupers'
+		context['list'] = SeriesGrouper.objects.all()
+		context['seriesgrouplist'] = True
+		return context	
+	
+class AuthorList(ListView):
+	model = Author
+	def get_context_data(self, **kwargs):
+		context = super(AuthorList, self).get_context_data(**kwargs)
+		context['title'] = 'Authors'
+		context['list'] = Author.objects.all()
+		context['authorlist'] = True
+		return context		
+
 class IssueList(ListView):
 	model = Issue
 	def get_context_data(self, **kwargs):
@@ -52,7 +92,8 @@ class IssueList(ListView):
 			author = Author.objects.get(pk = author_id)
 			context['historic'] = Issue.objects.filter(Q(series__author = author) | Q(author = author)).order_by('release_year', 'release_month', 'release_day', 'series__name')
 			context['includeSeriesName'] = True
-			context['title'] = author		
+			context['title'] = author	
+			context['addIssueQueryParams'] = 'author=' + author_id
 			return context
 		except KeyError:
 			pass
@@ -88,104 +129,66 @@ class IssueList(ListView):
 		except KeyError:
 			pass
 			
-
+		# Series
 		series_id = self.kwargs['series_id']
 		series = Series.objects.get(id=series_id)
 		context['series'] = series
 		context['title'] = series
 		context['historic'] = Issue.objects.filter(series = series_id).order_by('issue_number')
+		context['addIssueQueryParams'] = 'series=' + series_id
 		return context
 
-class Picklist(ListView):
-	model = Series
-	def get_context_data(self, **kwargs):
-		context = super(Picklist, self).get_context_data(**kwargs)
-		context['title'] = 'Current Series'
-		marvel = Series.objects.filter(current=True, publisher=1)
-		dc = Series.objects.filter(current=True, publisher__in=(3,4))
-		indy = Series.objects.filter(current=True).exclude(publisher__in=(1,3,4))
-		#context['list'] = Series.objects.filter(current=True).order_by('publisher','name')
-		context['list'] = chain(indy, dc, marvel)
-		return context
-	
-class SeriesList(ListView):
-	model = Series
-	def get_context_data(self, **kwargs):
-		context = super(SeriesList, self).get_context_data(**kwargs)
-		context['title'] = 'Series'
-		context['list'] = Series.objects.all()
-		context['serieslist'] = True
-		return context	
-		
-class SeriesGrouperList(ListView):
-	model = SeriesGrouper
-	def get_context_data(self, **kwargs):
-		context = super(SeriesGrouperList, self).get_context_data(**kwargs)
-		context['title'] = 'Series Groupers'
-		context['list'] = SeriesGrouper.objects.all()
-		context['seriesgrouplist'] = True
-		return context	
-	
-class AuthorList(ListView):
-	model = Author
-	def get_context_data(self, **kwargs):
-		context = super(AuthorList, self).get_context_data(**kwargs)
-		context['title'] = 'Authors'
-		context['list'] = Author.objects.all()
-		context['authorlist'] = True
-		return context		
-	
-def issue_form_upload(request):
-	if request.method == 'GET':
-	    #return HttpResponse("Foo")
-	    form = IssueForm()
-	else:
-		# A POST request: Handle Form Upload
-		# Bind data from request.POST into a PostForm
-		form = IssueForm(request.POST)
-		# If data is valid, proceeds to create a new post and redirect the user
-		if form.is_valid():
-			issue = form.save()
-			return HttpResponseRedirect('series/' + str(issue.series.id))
-	return render(request, 'cbtracker/issue_form_upload.html', {
-		'form': form,
-	})
-
-def issue(request, issue_id='', series_id='', author_id='', list_id=''):
+def issue(request, issue_id='', series_id='', author_id='', list_id='', return_to=''):
 	if request.method == 'POST':
 		if issue_id:
 			update_issue = Issue.objects.get(pk=issue_id)
 			form = IssueForm(request.POST, instance=update_issue)
 		else:
 			form = IssueForm(request.POST)
+		
 		if form.is_valid():
-			form.save()
-			url = '/comics/'
-			if series_id:
-				url = url + 'series/' + series_id
-			if author_id:
-				url = url + 'author/' + author_id
-			url = '../..'
+			url = form.cleaned_data['referrer']
+			if url == '':
+				url = '/cbtracker'
 			return HttpResponseRedirect(url)			
 		# TODO: what if the form isn't valid?
+		else:
+			return HttpResponse('Failed to save issue')
+	
+	
+	# If this is the latestissue URL, find the last issue for the series provided
+	if request.path_info.split('/')[2] == 'latestissue':
+		issue_id = Series.objects.get(pk=series_id).latest_issue().id	
 
 	# Prep form with default values	
 	context = RequestContext(request)
-	series = None
-	issue_number = None
-	release_month = None
-	release_year = None
-	story_name = None
-	story_part = None
-	author = None
-	fair_price = None
-	price_source = None
-	
+	referrer = None
+	try:
+		referrer = request.META['HTTP_REFERER']
+	except KeyError:
+		pass
+
+	# Updating an existing issue
 	if issue_id:
 		update_issue = Issue.objects.get(pk=issue_id)
-		form = IssueForm(instance = update_issue)
+		form = IssueForm(instance = update_issue, initial={'referrer': referrer})
 		context['title'] = 'Update ' + str(update_issue)
+		
+	# Creating a new issue
 	else:
+		series = None
+		issue_number = None
+		release_month = None
+		release_year = None
+		story_name = None
+		story_part = None
+		author = None
+		fair_price = None
+		price_source = None
+		
+		author_id = request.GET.get('author')
+		series_id = request.GET.get('series')
+		
 		context['title'] = 'Add Comic'
 		if series_id:
 			own = True
@@ -225,17 +228,18 @@ def issue(request, issue_id='', series_id='', author_id='', list_id=''):
 			'fair_price': fair_price,
 			'price_source': price_source,
 			'author': author,
+			'referrer': referrer
 		})
+	# endif
+	
 	return render(request, 'cbtracker/issue_form.html', {'form': form,}, context)
 
-def issueOwn(request, issue_id):
-	issue = Issue.objects.get(pk=issue_id)
-	issue.own = True
-	issue.save()
-	try:
-		return HttpResponseRedirect(request.META['HTTP_REFERER'])
-	except KeyError:
-		return HttpResponseRedirect('/comics/')		
+def latestIssue(request, series_id):
+	series = Series.objects.get(pk=series_id)
+	issue = series.latest_issue()
+
+	return issue(request, issue.id)
+	#return HttpResponse(issue.id)
 
 def bought(request, issue_id):
 	try:
@@ -245,8 +249,7 @@ def bought(request, issue_id):
 		return HttpResponse('bought' + issue_id)
 	except:
 		return HttpResponse('error')
-	
-	
+		
 def index(request):
 	return HttpResponseRedirect('wantlist')		
     #return HttpResponse("Hello, world. You're at the comicbook index.")

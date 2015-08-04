@@ -5,23 +5,34 @@
 	<tr>
 		<th class='seriesTitle'>Series</th>
 		<th>Publisher</th>
-		<th colspan=2>Last Known Issue</th>
+		{% if picklist %}
+			<th colspan=2>Last Known Issue</th>
+		{% endif %}
 	</tr>
 
 	{% for series in list %}
 	<tr>
 		<td class='seriesTitle'>
-			<a href="../series/{{ series.id }}">
+			<a href="{% url 'issues_by_series' series_id=series.id %}">
 				{{series}}
 			</a>
 		</td>
 		<td>{{series.publisher}}</td>
-		<td>
-			<a href='issue/{{series.latest_issue.id}}'>
-				{{series.latest_issue.issue_number}}
-			</a>
-		</td>
-		<td>{{series.latest_issue.release_date}}</td>
+		{% if picklist %}		
+			<td>
+				{% comment %}
+					It would be better to use the 'issue' endpoint instead of 'latest_issue'
+					and to pass it series.latest_issue.issue_number.id, but that won't work.
+					latest_issue is a function, and the url template function can't handle
+					calling it and then getting a parameter.  This seems more elegant (if
+					barely so) than building the URL by hand.
+				{% endcomment %}
+				<a href="{% url 'latest_issue' series_id=series.id %}">
+					{{series.latest_issue.issue_number}}
+				</a>
+			</td>
+			<td>{{series.latest_issue.release_date}}</td>
+		{% endif %}
 	</tr>
 	{% endfor %}
 </table>		
