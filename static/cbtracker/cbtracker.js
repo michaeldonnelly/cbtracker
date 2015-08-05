@@ -18,3 +18,7 @@ function disableRow(issue) {
 	button = document.getElementById(buttonID);
     button.disabled = true;
 }
+
+$('input[type = checkbox]').change(function () {
+    $('.far-out').toggle(self.checked);
+});

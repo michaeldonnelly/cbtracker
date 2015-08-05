@@ -14,14 +14,14 @@
 		{% endif %}
 	</title>
 
+	<!-- CB Database css -->
+    <link href="{% static 'cbtracker/cbtracker.css' %}" rel="stylesheet">
+
     <!-- Bootstrap -->
     <link href="{% static 'cbtracker/css/bootstrap.min.css' %}" rel="stylesheet">
 		
 	<!-- Bootstrap theme -->
     <link href="{% static 'cbtracker/css/bootstrap-theme.min.css' %}" rel="stylesheet">
-
-	<!-- CB Database css -->
-    <link href="{% static 'cbtracker/cbtracker.css' %}" rel="stylesheet">
 
 	{% block headers %}{% endblock %}
 	
@@ -35,7 +35,7 @@
   <body role="document">
 		
    	<!--<nav class="navbar navbar-fixed-top navbar-inverse">-->
-   	<nav class="navbar navbar-fixed-top navbar-default">
+   	<nav class="navbar navbar-fixed-top navbar-blue">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -48,9 +48,17 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li {%if wantlist%}class="active"{%endif%}>
-				<a href="{% url 'wantlist' %}">Want List</a> 
+			<li class="dropdown {%if wantlist%}active{%endif%}">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Want List <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					{% url 'wantlist' as wantlist_url %}
+					<li><a href="{{wantlist_url}}">All</a></li>
+					<li><a href="{{wantlist_url}}?include=current">Current Series</a></li>
+					<li><a href="{{wantlist_url}}?include=back">Back Issues</a></li>
+				</ul>
 			</li>
+			
+			
 			<li {%if picklist%}class="active"{%endif%}>							
 				<a href="{% url 'picklist' %}">Current Series</a>
 			</li> 
@@ -64,7 +72,7 @@
 				<a href="{% url 'author_list' %}">Authors</a> 		
 			</li>
 			<form class="navbar-form navbar-left" role="search">
-				<a href="{% url 'add_issue' %}?{{ addIssueQueryParams }}" class="btn btn-default" role="button">Add Issue</a>
+				<a href="{% url 'add_issue' %}?{{ addIssueQueryParams }}" class="btn btn-primary" role="button">Add Issue</a>
 			</form>			
           </ul>
         </div><!--/.nav-collapse -->

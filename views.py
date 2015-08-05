@@ -14,6 +14,17 @@ from cbtracker.forms import IssueForm
 class Wantlist(ListView):
 	model = Issue
 	template = 'cbtracker/issue_list.html'
+	current = True
+	backissues = True
+	
+	def get(self, request, *args, **kwargs):
+		include = request.GET.get('include')
+		if include == 'current':
+			self.backissues = False
+		elif include == 'back':
+			self.current = False
+		response = super(Wantlist, self).get(request, *args, **kwargs)
+		return response
 	
 	def get_context_data(self, **kwargs):
 		context = super(Wantlist, self).get_context_data(**kwargs)
@@ -21,12 +32,14 @@ class Wantlist(ListView):
 		context['wantlist'] = True
 		context['includeSeriesName'] = True
 		context['issues'] = Issue.objects.filter(own=False)
-		
-		current_issue_ids = [issue.id for issue in Issue.objects.filter(own=False) if issue.current()]
-		context['current'] = Issue.objects.filter(id__in=current_issue_ids)
-		
-		historic_issue_ids = [issue.id for issue in Issue.objects.filter(own=False) if not issue.current()]
-		context['historic'] = Issue.objects.filter(id__in=historic_issue_ids).order_by('series', 'issue_number')
+
+		if self.current:
+			current_issue_ids = [issue.id for issue in Issue.objects.filter(own=False) if issue.current()]
+			context['current'] = Issue.objects.filter(id__in=current_issue_ids)
+
+		if self.backissues:		
+			historic_issue_ids = [issue.id for issue in Issue.objects.filter(own=False) if not issue.current()]
+			context['historic'] = Issue.objects.filter(id__in=historic_issue_ids).order_by('series', 'issue_number')
 
 		return context
 		
@@ -96,37 +109,6 @@ class IssueList(ListView):
 			context['includeSeriesName'] = True
 			context['title'] = author	
 			context['addIssueQueryParams'] = 'author=' + author_id
-			return context
-		except KeyError:
-			pass
-			
-		# List
-		try:
-			list_id = self.kwargs['list_id']
-			list = List.objects.get(pk = list_id)
-			
-			#marvelS = list.series.filter(publisher__in = (1,5))
-			#dcS = list.series.filter(publisher__in = (3,4))
-			#indyS = list.series.exclude(publisher__in = (1,3,4,5))
-			
-			#marvelI = Issue.objects.filter(own = False, series__in = marvelS)
-			#dcI = Issue.objects.filter(own = False, series__in = dcS)
-			#indyI = Issue.objects.filter(own = False, series__in = indyS)
-			
-			
-			seriesList = list.series.all()
-			issueList = Issue.objects.filter(own = False, series__in=seriesList)
-			context['historic'] = issueList.order_by('series__name')
-			
-			
-			#seriesList = list.series.all()
-			#context['historic'] = Issue.objects.filter(own = False, series__in=seriesList)
-			
-			#context['historic'] = chain(marvelI, dcI, indyI)
-			context['includeSeriesName'] = True
-			context['title'] = list
-			#context['title'] = seriesList
-			context['wantlist'] = True
 			return context
 		except KeyError:
 			pass

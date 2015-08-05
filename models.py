@@ -88,6 +88,20 @@ class Issue(models.Model):
 			date = date + '0'
 		date = date + str(self.release_day)
 		return date
+		
+	def release_delta(self):
+		day = self.release_day
+		if day < 1:
+			day = 1
+		release = datetime.date(self.release_year, self.release_month, day)
+		delta = release - datetime.date.today()
+		return delta		
+		
+	def far_out(self):
+		return self.release_delta() > datetime.timedelta(days = 13)
+
+	def far_back(self):
+		return self.release_delta() < datetime.timedelta(days = 90)	
 
 	class Meta:
 		ordering = ['-release_year', '-release_month', '-release_day', '-issue_number']

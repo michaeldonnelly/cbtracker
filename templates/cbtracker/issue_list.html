@@ -1,8 +1,27 @@
 {% extends "cbtracker/base.html" %}
 
 {% block content %}
+
 {% if current %}
-	<h3>Current Series</h3>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4">
+				<h3>Current Series</h3>
+			</div>
+			<div class="col-md-7" align="right">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" id="showFarOut" unchecked>
+						Show comics shipping more than two weeks out.
+					</label>
+				</div>
+			</div>
+		</div><!--row-->
+	</div><!--container-->
+
+
+
+
 	<table class='table sortable'>
 		<tr>
 			<th class='seriesTitle'>Series</th>
@@ -13,7 +32,9 @@
 		</tr>
 
 		{% for issue in current %}
-		<tr id="r{{issue.id}}">
+		<tr id="r{{issue.id}}" 
+			{% if issue.far_out %} class="far-out" {% endif %}
+		>
 			<td class='seriesTitle'>
 				<a href="{% url 'issues_by_series' series_id=issue.series.id %}">
 					{{issue.series}}
@@ -42,93 +63,98 @@
 		</tr>
 		{% endfor %}
 	</table>		
-
-	<h3>Completed Series</h3>
-
-{% else %}
-	<div class="container">
-		<div class="row">
-			<div class="col-md-4">
-				<h2>{{title}}</h2>
-			</div>
-			<div class="col-md-4">
-				{% if series.author %}
-					<h2>
-						<a href="{% url 'issues_by_author' author_id=series.author.id %}">
-							{{series.author}}
-						</a>
-					</h2>
-				{% endif %}
-			</div>
-			<div class="col-md-4">
-				{% if series.publisher %}
-					<h2>{{series.publisher}}</h2>
-				{% endif %}
-			</div> 
-		</div><!--row-->
-	</div><!--container-->
 {% endif %}
 
-<table class='table sortable'>
-	<tr>
-		{% if includeSeriesName %}<th class='seriesTitle'>Series</th>{% endif %}
-		<th colspan=2>Issue</th>
-		{% if not wantlist %}		
-			<th>Story</th>
-		{% endif %}
-		<th>Release Date</th>
-		{% if wantlist %}
-			<th>Publisher</th>
-			<th>Price</th>
-			<th></th>
-		{% endif %}
-	</tr>
 
-	{% for issue in historic %}
-	<tr id="r{{issue.id}}" {% if not wantlist and not issue.own %} class='danger' {% endif %}>
-		{% if includeSeriesName %}
-			<td class='seriesTitle'>
-				<a href="{% url 'issues_by_series' series_id=issue.series.id %}">
-					{{issue.series}}
+{% if historic %}
+	{% if wantlist %}
+		<h3>Completed Series</h3>
+
+	{% else %}
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<h2>{{title}}</h2>
+				</div>
+				<div class="col-md-4">
+					{% if series.author %}
+						<h2>
+							<a href="{% url 'issues_by_author' author_id=series.author.id %}">
+								{{series.author}}
+							</a>
+						</h2>
+					{% endif %}
+				</div>
+				<div class="col-md-4">
+					{% if series.publisher %}
+						<h2>{{series.publisher}}</h2>
+					{% endif %}
+				</div> 
+			</div><!--row-->
+		</div><!--container-->
+	{% endif %}
+
+	<table class='table sortable'>
+		<tr>
+			{% if includeSeriesName %}<th class='seriesTitle'>Series</th>{% endif %}
+			<th colspan=2>Issue</th>
+			{% if not wantlist %}		
+				<th>Story</th>
+			{% endif %}
+			<th>Release Date</th>
+			{% if wantlist %}
+				<th>Publisher</th>
+				<th>Price</th>
+				<th></th>
+			{% endif %}
+		</tr>
+
+		{% for issue in historic %}
+		<tr id="r{{issue.id}}" {% if not wantlist and not issue.own %} class='danger' {% endif %}>
+			{% if includeSeriesName %}
+				<td class='seriesTitle'>
+					<a href="{% url 'issues_by_series' series_id=issue.series.id %}">
+						{{issue.series}}
+					</a>
+				</td>
+			{% endif %}
+			<td>
+				<a href="{% url 'issue' issue_id=issue.id %}">
+					{{issue.issue_number}}
 				</a>
 			</td>
-		{% endif %}
-		<td>
-			<a href="{% url 'issue' issue_id=issue.id %}">
-				{{issue.issue_number}}
-			</a>
-		</td>
-		<td>{{issue.variant}}</td>
-		{% if not wantlist %}	
+			<td>{{issue.variant}}</td>
+			{% if not wantlist %}	
+				<td>
+					{{issue.story_name}}
+					{% if issue.story_part %}
+						part {{issue.story_part}}
+					{% endif %}
+				</td>
+			{% endif %}		
+			<td>{{issue.release_date}}</td>
+			{% if wantlist %}
 			<td>
-				{{issue.story_name}}
-				{% if issue.story_part %}
-					part {{issue.story_part}}
+				{% if issue.publisher != None %}
+					{{issue.publisher}}
+				{% else %}
+					{% if issue.series.publisher != None %}
+						{{issue.series.publisher}}
+					{% endif %}
 				{% endif %}
 			</td>
-		{% endif %}		
-		<td>{{issue.release_date}}</td>
-		{% if wantlist %}
-		<td>
-			{% if issue.publisher != None %}
-				{{issue.publisher}}
-			{% else %}
-				{% if issue.series.publisher != None %}
-					{{issue.series.publisher}}
+			<td>
+				{% if issue.fair_price > 0 %}
+					${{issue.fair_price}}
 				{% endif %}
+			</td>
+			<td>
+				<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-default btn-xs" onclick="buy({{issue.id}});" />
+			</td>
 			{% endif %}
-		</td>
-		<td>
-			{% if issue.fair_price > 0 %}
-				${{issue.fair_price}}
-			{% endif %}
-		</td>
-		<td>
-			<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-default btn-xs" onclick="buy({{issue.id}});" />
-		</td>
-		{% endif %}
-	</tr>
-	{% endfor %}
-</table>		
+		</tr>
+		{% endfor %}
+	</table>	
+{% endif %}	
 
 {% endblock %}
