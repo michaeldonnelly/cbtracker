@@ -1,14 +1,12 @@
 {% extends "cbtracker/base.html" %}
 
 {% block content %}
-<ul>
+<div class="list-group">
 	{% for seriesGrouper in list %}
-	<li>
-		<a href="{% url 'issues_by_group' seriesGrouper_id=seriesGrouper.id %}">
+		<a href="{% url 'issues_by_group' seriesGrouper_id=seriesGrouper.id %}" class="list-group-item">
 			{{seriesGrouper.name}}
 		</a>
-	</li>
 	{% endfor %}
-</ul>
+</div>
 
 {% endblock %}

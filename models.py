@@ -75,8 +75,14 @@ class Issue(models.Model):
 		if self.release_month < 10:
 			date = date + '0'
 		date = date + str(self.release_month)
+		return date		
+		
+	def release_date_with_day(self):
+		date = self.release_date()
+
 		if self.release_day == 0:
 			return date
+
 		date = date + '-'
 		if self.release_day < 10:
 			date = date + '0'

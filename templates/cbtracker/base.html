@@ -6,22 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-		<title>
-			Comic Book Tracker
-			{% if title %}
-				- {{title}}
-			{% endif %}
-		</title>
+	<meta name="author" content="michael donnelly">
+	<title>
+		Comic Book Tracker
+		{% if title %}
+			- {{title}}
+		{% endif %}
+	</title>
 
     <!-- Bootstrap -->
     <link href="{% static 'cbtracker/css/bootstrap.min.css' %}" rel="stylesheet">
 		
-		<!-- Bootstrap theme -->
+	<!-- Bootstrap theme -->
     <link href="{% static 'cbtracker/css/bootstrap-theme.min.css' %}" rel="stylesheet">
 
-		<!-- CB Database css -->
+	<!-- CB Database css -->
     <link href="{% static 'cbtracker/cbtracker.css' %}" rel="stylesheet">
 
+	{% block headers %}{% endblock %}
+	
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -41,14 +44,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'index' %}">Comic Book Tracker</a>
+          <a class="navbar-brand" href="{% url 'index' %}">CB Tracker</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li {%if wantlist%}class="active"{%endif%}>
 				<a href="{% url 'wantlist' %}">Want List</a> 
 			</li>
-            <li>
+			<li {%if picklist%}class="active"{%endif%}>							
 				<a href="{% url 'picklist' %}">Current Series</a>
 			</li> 
 			<li {%if serieslist%}class="active"{%endif%}>							
@@ -60,9 +63,9 @@
             <li {%if authorlist%}class="active"{%endif%}>							
 				<a href="{% url 'author_list' %}">Authors</a> 		
 			</li>
-			<li>
-				<a href="{% url 'add_issue' %}?{{ addIssueQueryParams }}" class="btn btn-default" role="button">Add New Issue</a>
-			</li>
+			<form class="navbar-form navbar-left" role="search">
+				<a href="{% url 'add_issue' %}?{{ addIssueQueryParams }}" class="btn btn-default" role="button">Add Issue</a>
+			</form>			
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -76,6 +79,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{% static 'cbtracker/js/bootstrap.min.js' %}"></script>
+    <!-- Sortable tables -->
+    <script src="{% static 'cbtracker/js/sorttable.js' %}"></script>
     <!-- custom JS for CBT -->
     <script src="{% static 'cbtracker/cbtracker.js' %}"></script>
   </body>

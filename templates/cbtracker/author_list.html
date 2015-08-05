@@ -1,14 +1,11 @@
 {% extends "cbtracker/base.html" %}
 
 {% block content %}
-<ul>
+<div class="list-group">
 	{% for author in list %}
-	<li>
-		<a href="{% url 'issues_by_author' author_id=author.id %}">
+		<a href="{% url 'issues_by_author' author_id=author.id %}" class="list-group-item">
 			{{author.name}}
 		</a>
-	</li>
 	{% endfor %}
-</ul>
-
+</div>
 {% endblock %}

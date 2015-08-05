@@ -1,12 +1,14 @@
 from django.conf.urls import url
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 
 from . import views, forms
 
 urlpatterns = [
 	# Special pages
     url(r'^$', views.index, name='index'),
-    url(r'^wantlist/$', views.Wantlist.as_view(), name='wantlist'),
-    url(r'^picklist/$', views.Picklist.as_view(), name='picklist'),
+    url(r'^wantlist/$', login_required(views.Wantlist.as_view()), name='wantlist'),
+    url(r'^picklist/$', login_required(views.Picklist.as_view()), name='picklist'),
     
     # Series
     url(r'^series/$', views.SeriesList.as_view(), name='series_list'),
@@ -31,4 +33,4 @@ urlpatterns = [
 
     # Mark an issue as owned
     url(r'^issue/(?P<issue_id>\d+)/own/$', views.bought, name='own_issue'),    
-]
+	]

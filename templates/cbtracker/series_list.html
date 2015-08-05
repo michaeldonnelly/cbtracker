@@ -1,12 +1,13 @@
 {% extends "cbtracker/base.html" %}
 
 {% block content %}
-<table class='table'>
+<table class='table sortable'>
 	<tr>
 		<th class='seriesTitle'>Series</th>
 		<th>Publisher</th>
 		{% if picklist %}
-			<th colspan=2>Last Known Issue</th>
+			<th>Last Issue</th>
+			<th>Ship Date</th>
 		{% endif %}
 	</tr>
 
@@ -31,7 +32,7 @@
 					{{series.latest_issue.issue_number}}
 				</a>
 			</td>
-			<td>{{series.latest_issue.release_date}}</td>
+			<td>{{series.latest_issue.release_date_with_day}}</td>
 		{% endif %}
 	</tr>
 	{% endfor %}

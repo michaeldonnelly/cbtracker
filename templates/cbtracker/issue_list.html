@@ -3,11 +3,11 @@
 {% block content %}
 {% if current %}
 	<h3>Current Series</h3>
-	<table class='table'>
+	<table class='table sortable'>
 		<tr>
 			<th class='seriesTitle'>Series</th>
 			<th>Issue</th>
-			<th>Release Date</th>
+			<th>Ship Date</th>
 			<th>Publisher</th>
 			{%if wantlist %}<th></th>{% endif %}
 		</tr>
@@ -24,7 +24,7 @@
 					{{issue.issue_number}}
 				</a>
 			</td>			
-			<td>{{issue.release_date}}</td>
+			<td>{{issue.release_date_with_day}}</td>
 			<td>
 				{% if issue.publisher != None %}
 					{{issue.publisher}}
@@ -69,7 +69,7 @@
 	</div><!--container-->
 {% endif %}
 
-<table class='table'>
+<table class='table sortable'>
 	<tr>
 		{% if includeSeriesName %}<th class='seriesTitle'>Series</th>{% endif %}
 		<th colspan=2>Issue</th>
@@ -107,7 +107,7 @@
 				{% endif %}
 			</td>
 		{% endif %}		
-		<td>{{issue.release_month}}/{{issue.release_year}}</td>
+		<td>{{issue.release_date}}</td>
 		{% if wantlist %}
 		<td>
 			{% if issue.publisher != None %}

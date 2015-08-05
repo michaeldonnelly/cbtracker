@@ -4,6 +4,8 @@ from django.http import HttpResponseRedirect
 from django.views.generic.list import ListView
 from django.template import RequestContext
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
 from itertools import chain
 
 from cbtracker.models import Issue, Series, SeriesGrouper, Author, List
@@ -138,6 +140,7 @@ class IssueList(ListView):
 		context['addIssueQueryParams'] = 'series=' + series_id
 		return context
 
+@login_required
 def issue(request, issue_id='', series_id='', author_id='', list_id='', return_to=''):
 	if request.method == 'POST':
 		if issue_id:
@@ -147,6 +150,7 @@ def issue(request, issue_id='', series_id='', author_id='', list_id='', return_t
 			form = IssueForm(request.POST)
 		
 		if form.is_valid():
+			form.save()
 			url = form.cleaned_data['referrer']
 			if url == '':
 				url = '/cbtracker'
@@ -234,6 +238,7 @@ def issue(request, issue_id='', series_id='', author_id='', list_id='', return_t
 	
 	return render(request, 'cbtracker/issue_form.html', {'form': form,}, context)
 
+@login_required
 def latestIssue(request, series_id):
 	series = Series.objects.get(pk=series_id)
 	issue = series.latest_issue()
@@ -241,6 +246,7 @@ def latestIssue(request, series_id):
 	return issue(request, issue.id)
 	#return HttpResponse(issue.id)
 
+@login_required
 def bought(request, issue_id):
 	try:
 		issue = Issue.objects.get(pk=issue_id)
@@ -249,11 +255,8 @@ def bought(request, issue_id):
 		return HttpResponse('bought' + issue_id)
 	except:
 		return HttpResponse('error')
-		
+
+@login_required		
 def index(request):
 	return HttpResponseRedirect('wantlist')		
     #return HttpResponse("Hello, world. You're at the comicbook index.")
-    
-def wantlist(request):
-	return "foo"
-	
