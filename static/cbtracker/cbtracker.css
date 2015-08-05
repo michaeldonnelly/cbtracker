@@ -8,6 +8,10 @@ body { padding-top: 70px; }
 	display: none;
 }
 
+.invisible {
+	display: invisible;
+}
+
 
 .navbar-blue {
   color: #31708f;

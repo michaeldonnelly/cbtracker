@@ -5,12 +5,12 @@
 {% if current %}
 	<div class="container">
 		<div class="row">
-			<div class="col-md-4">
-				<h3>Current Series</h3>
+			<div class="col-md-6">
+				<h3>Current</h3>
 			</div>
-			<div class="col-md-7" align="right">
+			<div class="col-md-6" align="right">
 				<div class="checkbox">
-					<label>
+					<label class="alert alert-info">
 						<input type="checkbox" id="showFarOut" unchecked>
 						Show comics shipping more than two weeks out.
 					</label>
@@ -18,9 +18,6 @@
 			</div>
 		</div><!--row-->
 	</div><!--container-->
-
-
-
 
 	<table class='table sortable'>
 		<tr>
@@ -67,15 +64,24 @@
 
 
 {% if historic %}
-	{% if wantlist %}
-		<h3>Completed Series</h3>
-
-	{% else %}
-		<div class="container">
-			<div class="row">
+	<div class="container">
+		<div class="row">
+			{% if wantlist %}
+			<div class="col-md-6">
+				<h3>Back Issues</h3>
+			</div>
+			<div class="col-md-6" align="right">
+				<div class="checkbox">
+					<label class="alert alert-info">
+						<input type="checkbox" id="group-by-series" checked>
+						Group comics by series.
+					</label>
+				</div>
+			</div>
+			{% else %}
 				<div class="col-md-4">
 					<h2>{{title}}</h2>
-				</div>
+				</div>		
 				<div class="col-md-4">
 					{% if series.author %}
 						<h2>
@@ -90,11 +96,11 @@
 						<h2>{{series.publisher}}</h2>
 					{% endif %}
 				</div> 
-			</div><!--row-->
-		</div><!--container-->
-	{% endif %}
+			{% endif %}
+		</div><!--row-->
+	</div><!--container-->
 
-	<table class='table sortable'>
+	<table class='table sortable back-issue-table' {% if wantlist %} style="display: none;" {% endif %}>
 		<tr>
 			{% if includeSeriesName %}<th class='seriesTitle'>Series</th>{% endif %}
 			<th colspan=2>Issue</th>
@@ -155,6 +161,69 @@
 		</tr>
 		{% endfor %}
 	</table>	
+
+{%if wantlist %}
+	<table class='table back-issue-table'>
+		<tr>
+			<th colspan=2>Series / Issue</th>
+			<th>Publisher / Release Date</th>
+			<th colspan=2>Price</th>
+		</tr>
+
+		{% for series in grouped_by_series %}
+		{% for issue in series %}
+		{% if forloop.first %}
+			<tr>
+				<td colspan=2 class='seriesTitle'>
+					<a href="#series{{issue.series.id}}" class="collapser" id="series-{{issue.series.id}}">
+						<span class="glyphicon glyphicon-triangle-right row-series-{{issue.series.id}}" aria-hidden="true"></span>
+						<span class="glyphicon glyphicon-triangle-bottom row-series-{{issue.series.id}}" style="display: none;"
+						aria-hidden="true"></span>
+						{{issue.series}}
+					</a>
+				</td>
+				<td>{{issue.series.publisher}}</td>
+				<td>
+					<div class="invisible">$00.00</div>
+				</td>
+				<td>
+					<input type="button" value="Bought" class="btn btn-default btn-xs invisible" />
+				</td>
+			</tr>
+		{% endif %}
+		
+		<tr id="r{{issue.id}} collapsable-row" class="row-series-{{issue.series.id}}" style="display: none;">
+			<td>
+				<a href="{% url 'issue' issue_id=issue.id %}">
+					{{issue.issue_number}}
+				</a>
+			</td>
+			<td>{{issue.variant}}</td>
+			<td>{{issue.release_date}}</td>
+			<td>
+				{% if issue.publisher != None %}
+					{{issue.publisher}}
+				{% endif %}
+
+				{% if issue.fair_price > 0 %}
+					${{issue.fair_price}}
+				{% endif %}
+			</td>
+			<td>
+				<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-default btn-xs" onclick="buy({{issue.id}});" />
+			</td>
+		</tr>
+		{% endfor %}
+		{% endfor %}
+	</table>	
+
+{% endif %}
 {% endif %}	
+
+
+
+
+
+
 
 {% endblock %}

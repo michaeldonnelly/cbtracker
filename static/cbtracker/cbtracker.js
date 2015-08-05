@@ -19,6 +19,21 @@ function disableRow(issue) {
     button.disabled = true;
 }
 
-$('input[type = checkbox]').change(function () {
-    $('.far-out').toggle(self.checked);
+
+function toggleSeries(series) {
+	$('.r' + series).toggle();
+}
+
+$('#showFarOut').change(function () {
+    $('.far-out').toggle();
 });
+
+$('.collapser').click(function () {
+    $('.row-' + this.id).toggle();
+});
+
+$('#group-by-series').change(function () {
+    $('.back-issue-table').toggle();
+});
+
+

@@ -43,6 +43,18 @@ class Wantlist(ListView):
 			historic_issue_ids = current_back_issue_ids + old_issue_ids
 			context['historic'] = Issue.objects.filter(id__in=historic_issue_ids).order_by('series', 'issue_number')
 
+			# get info for collapsable sections
+			series = []
+			for i in context['historic']:
+				if not i.series.id in series:
+					series.append(i.series.id)
+			all_issues_in_series = []
+			for s in series:
+				issues_in_s = context['historic'].filter(series = s)
+				all_issues_in_series.append(issues_in_s)
+			context['grouped_by_series'] = all_issues_in_series
+			
+			
 		return context
 		
 class Picklist(ListView):
