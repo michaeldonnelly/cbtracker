@@ -101,7 +101,7 @@ class Issue(models.Model):
 		return self.release_delta() > datetime.timedelta(days = 13)
 
 	def far_back(self):
-		return self.release_delta() < datetime.timedelta(days = 90)	
+		return self.release_delta() < datetime.timedelta(days = -90)	
 
 	class Meta:
 		ordering = ['-release_year', '-release_month', '-release_day', '-issue_number']

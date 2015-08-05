@@ -34,11 +34,13 @@ class Wantlist(ListView):
 		context['issues'] = Issue.objects.filter(own=False)
 
 		if self.current:
-			current_issue_ids = [issue.id for issue in Issue.objects.filter(own=False) if issue.current()]
+			current_issue_ids = [issue.id for issue in Issue.objects.filter(own=False) if issue.current() and not issue.far_back()]
 			context['current'] = Issue.objects.filter(id__in=current_issue_ids)
 
 		if self.backissues:		
-			historic_issue_ids = [issue.id for issue in Issue.objects.filter(own=False) if not issue.current()]
+			current_back_issue_ids = [issue.id for issue in Issue.objects.filter(own=False) if issue.current() and issue.far_back()]
+			old_issue_ids = [issue.id for issue in Issue.objects.filter(own=False) if not issue.current()]
+			historic_issue_ids = current_back_issue_ids + old_issue_ids
 			context['historic'] = Issue.objects.filter(id__in=historic_issue_ids).order_by('series', 'issue_number')
 
 		return context
