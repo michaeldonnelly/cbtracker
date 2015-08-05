@@ -6,11 +6,13 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6">
-				<h3>Current</h3>
+				<h2>Current</h2>
 			</div>
-			<div class="col-md-6" align="right">
-				<div class="checkbox">
-					<label class="alert alert-info">
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-4" align="center">
+				<div class="checkbox alert alert-info">
+					<label class="">
 						<input type="checkbox" id="showFarOut" unchecked>
 						Show comics shipping more than two weeks out.
 					</label>
@@ -42,7 +44,7 @@
 					{{issue.issue_number}}
 				</a>
 			</td>			
-			<td>{{issue.release_date_with_day}} {{issue.far_back}}</td>
+			<td>{{issue.release_date_with_day}}</td>
 			<td>
 				{% if issue.publisher != None %}
 					{{issue.publisher}}
@@ -54,7 +56,7 @@
 			</td>
 			{% if wantlist %}
 				<td>
-					<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-default btn-xs" onclick="buy({{issue.id}});" />
+					<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
 				</td>
 			{% endif %}
 		</tr>
@@ -68,11 +70,13 @@
 		<div class="row">
 			{% if wantlist %}
 			<div class="col-md-6">
-				<h3>Back Issues</h3>
+				<h2>Back Issues</h3>
 			</div>
-			<div class="col-md-6" align="right">
-				<div class="checkbox">
-					<label class="alert alert-info">
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-4" align="center">
+				<div class="checkbox alert alert-info">
+					<label>
 						<input type="checkbox" id="group-by-series" checked>
 						Group comics by series.
 					</label>
@@ -155,7 +159,7 @@
 				{% endif %}
 			</td>
 			<td>
-				<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-default btn-xs" onclick="buy({{issue.id}});" />
+				<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
 			</td>
 			{% endif %}
 		</tr>
@@ -187,7 +191,7 @@
 					<div class="invisible">$00.00</div>
 				</td>
 				<td>
-					<input type="button" value="Bought" class="btn btn-default btn-xs invisible" />
+					<input type="button" value="Bought" class="btn btn-success btn-xs invisible" />
 				</td>
 			</tr>
 		{% endif %}
@@ -210,7 +214,7 @@
 				{% endif %}
 			</td>
 			<td>
-				<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-default btn-xs" onclick="buy({{issue.id}});" />
+				<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
 			</td>
 		</tr>
 		{% endfor %}
