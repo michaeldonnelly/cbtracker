@@ -161,6 +161,11 @@ class Trade(models.Model):
 	volume = models.IntegerField()
 	own = models.BooleanField(default='true')
 	title = models.CharField(max_length=200, null=True, blank=True)
+	release_month = models.IntegerField(null=True, blank=True)
+	release_year = models.IntegerField(null=True, blank=True)
+	
+	def release_date(self):
+		return date_ym(self.release_year, self.release_month)
 		
 	def __str__(self):
 		trade = self.series.name + ' #' + str(self.volume)

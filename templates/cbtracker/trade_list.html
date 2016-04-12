@@ -6,6 +6,7 @@
 		<tr>
 			<th>Series</th>
 			<th>Publisher</th>
+			<th>Scheduled Release</th>
 		</tr>
 
 		{% for trade in list %}
@@ -19,6 +20,9 @@
 				{% if trade.series.publisher != None %}
 					{{trade.series.publisher}}
 				{% endif %}
+			</td>
+			<td>
+				{{trade.release_date}}
 			</td>
 		</tr>
 		{% endfor %}
