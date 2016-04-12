@@ -166,6 +166,18 @@ class Trade(models.Model):
 	
 	def release_date(self):
 		return date_ym(self.release_year, self.release_month)
+
+	def release_delta(self):
+		try:
+			day = 1
+			release = datetime.date(self.release_year, self.release_month, day)
+		except TypeError:
+			release = datetime.date.today()		
+		delta = release - datetime.date.today()
+		return delta		
+
+	def unreleased(self):
+		return self.release_delta() > datetime.timedelta(days = 0)
 		
 	class Meta:
 		ordering = ['series', 'volume']

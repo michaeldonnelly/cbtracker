@@ -31,7 +31,6 @@ function disableButton(buttonID) {
 	}
 }
 
-
 function toggleSeries(series) {
 	$('.r' + series).toggle();
 }
@@ -56,4 +55,7 @@ $('#group-by-series').change(function () {
     $('.back-issue-table').toggle();
 });
 
+$('#showUnreleased').change(function () {
+    $('.unreleased').toggle();
+});
 

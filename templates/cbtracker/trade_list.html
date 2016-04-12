@@ -1,16 +1,35 @@
 {% extends "cbtracker/base.html" %}
 
 {% block content %}
-
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4" align="center">
+				<div class="checkbox alert alert-info">
+					<label class="">
+						<input type="checkbox" id="showUnreleased" checked>
+						Show trades that haven't been released yet
+					</label>
+				</div>
+			</div>
+		</div><!--row-->
+	</div><!--container-->
+	
 	<table class='table'>
 		<tr>
-			<th>Series</th>
+			<th>Trade</th>
 			<th>Publisher</th>
 			<th>Scheduled Release</th>
 		</tr>
 
 		{% for trade in list %}
-		<tr id="r{{trade.id}}" {% if not wantlist and not trade.own %} class='danger' {% endif %}> 
+		<tr
+			{% if trade.unreleased %} 
+				class="unreleased danger"
+			{% elif not wantlist and not trade.own %} 
+				class='danger' 
+			{% endif %}
+		    id="r{{trade.id}}" 
+		> 
 			<td>
 				<a href="{% url 'trade' trade_id=trade.id %}">
 					{{trade}}
