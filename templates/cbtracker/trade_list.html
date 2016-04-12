@@ -1,0 +1,27 @@
+{% extends "cbtracker/base.html" %}
+
+{% block content %}
+
+	<table class='table'>
+		<tr>
+			<th>Series</th>
+			<th>Publisher</th>
+		</tr>
+
+		{% for trade in list %}
+		<tr id="r{{trade.id}}" {% if not wantlist and not trade.own %} class='danger' {% endif %}> 
+			<td>
+				<a href="{% url 'trade' trade_id=trade.id %}">
+					{{trade}}
+				</a>
+			</td>
+			<td>				
+				{% if trade.series.publisher != None %}
+					{{trade.series.publisher}}
+				{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+	</table>		
+
+{% endblock %}

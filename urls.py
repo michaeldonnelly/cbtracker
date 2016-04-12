@@ -13,6 +13,7 @@ urlpatterns = [
     # Series
     url(r'^series/$', views.SeriesList.as_view(), name='series_list'),
 	url(r'^series/(?P<series_id>\d+)/$', views.IssueList.as_view(), name='issues_by_series'),
+	#url(r'^series/(?P<series_id>\d+)/trade/$', views.TradeList.as_view(), name='trades_by_series'),
 
 	# Author
     url(r'^author/$', views.AuthorList.as_view(), name='author_list'),
@@ -24,6 +25,12 @@ urlpatterns = [
 
 #	url(r'^list/(?P<list_id>\d+)/$', views.IssueList.as_view(), name='list'),
 
+	# Trades
+    url(r'^trade/$', views.TradeList.as_view(), name='trade_list'),
+    url(r'^trade/(?P<trade_id>\d+)/$', views.trade, name='trade'),    
+    url(r'^trade/add/$', views.trade, name='add_trade'),    
+	
+	
 	# Add issue
     url(r'^issue/add/$', views.issue, name='add_issue'),    
 

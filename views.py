@@ -7,9 +7,10 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
 from itertools import chain
+import csv
 
-from cbtracker.models import Issue, Series, SeriesGrouper, Author, List
-from cbtracker.forms import IssueForm
+from cbtracker.models import Issue, Series, SeriesGrouper, Author, List, Trade
+from cbtracker.forms import IssueForm, TradeForm
 
 class Wantlist(ListView):
 	model = Issue
@@ -108,7 +109,7 @@ class IssueList(ListView):
 		try:
 			seriesGrouper_id = self.kwargs['seriesGrouper_id']
 			seriesGrouper = SeriesGrouper.objects.get(pk = seriesGrouper_id)
-			context['historic'] = Issue.objects.filter(series__seriesGrouper = seriesGrouper).order_by('release_year', 'release_month', 'release_day')
+			context['historic'] = Issue.objects.filter(series__seriesGrouper = seriesGrouper).order_by('cover_year', 'cover_month')
 			context['includeSeriesName'] = True
 			context['title'] = seriesGrouper		
 			return context
@@ -119,9 +120,10 @@ class IssueList(ListView):
 		try:
 			author_id = self.kwargs['author_id']
 			author = Author.objects.get(pk = author_id)
-			context['historic'] = Issue.objects.filter(Q(series__author = author) | Q(author = author)).order_by('release_year', 'release_month', 'release_day', 'series__name')
+			context['historic'] = Issue.objects.filter(Q(series__author = author) | Q(author = author)).order_by('cover_year', 'cover_month', 'series__name')
 			context['includeSeriesName'] = True
 			context['title'] = author	
+			context['includePublisher'] = True
 			context['addIssueQueryParams'] = 'author=' + author_id
 			return context
 		except KeyError:
@@ -136,6 +138,15 @@ class IssueList(ListView):
 		context['addIssueQueryParams'] = 'series=' + series_id
 		return context
 
+class TradeList(ListView):
+	model = Trade
+	def get_context_data(self, **kwargs):
+		context = super(TradeList, self).get_context_data(**kwargs)
+		context['title'] = 'Trades'
+		context['list'] = Trade.objects.all()
+		context['tradelist'] = True
+		return context
+		
 @login_required
 def issue(request, issue_id='', series_id='', author_id='', list_id='', return_to=''):
 	if request.method == 'POST':
@@ -178,8 +189,8 @@ def issue(request, issue_id='', series_id='', author_id='', list_id='', return_t
 	else:
 		series = None
 		issue_number = None
-		release_month = None
-		release_year = None
+		cover_month = None
+		cover_year = None
 		story_name = None
 		story_part = None
 		author = None
@@ -197,12 +208,12 @@ def issue(request, issue_id='', series_id='', author_id='', list_id='', return_t
 			if latest_issue:
 				issue_number = latest_issue.issue_number + 1
 				own = latest_issue.own
-				if latest_issue.release_month < 12:
-					release_year = latest_issue.release_year
-					release_month = latest_issue.release_month + 1
+				if latest_issue.cover_month < 12:
+					cover_year = latest_issue.cover_year
+					cover_month = latest_issue.cover_month + 1
 				else:
-					release_year = latest_issue.release_year + 1
-					release_month = 1
+					cover_year = latest_issue.cover_year + 1
+					cover_month = 1
 				if latest_issue.story_part:
 					story_name = latest_issue.story_name
 					story_part = latest_issue.story_part + 1
@@ -211,7 +222,7 @@ def issue(request, issue_id='', series_id='', author_id='', list_id='', return_t
 				price_source = latest_issue.price_source
 			else:
 				issue_number = 1
-				release_year = series.start_year
+				cover_year = series.start_year
 			context['title'] = context['title'] + ' - ' + str(series)
 		else:
 			own = False
@@ -221,8 +232,8 @@ def issue(request, issue_id='', series_id='', author_id='', list_id='', return_t
 			'series': series, 
 			'own': own, 
 			'issue_number': issue_number,
-			'release_year': release_year,
-			'release_month': release_month,
+			'cover_year': cover_year,
+			'cover_month': cover_month,
 			'story_name': story_name,
 			'story_part': story_part,
 			'fair_price': fair_price,
@@ -233,6 +244,55 @@ def issue(request, issue_id='', series_id='', author_id='', list_id='', return_t
 	# endif
 	
 	return render(request, 'cbtracker/issue_form.html', {'form': form,}, context)
+
+@login_required
+def trade(request, trade_id=''):
+	if request.method == 'POST':
+		if trade_id:
+			update_trade = Trade.objects.get(pk=trade_id)
+			form = TradeForm(request.POST, instance=update_trade)
+		else:
+			form = TradeForm(request.POST)
+		
+		if form.is_valid():
+			form.save()
+			url = form.cleaned_data['referrer']
+			if url == '':
+				url = '/cbtracker'
+			return HttpResponseRedirect(url)			
+		# TODO: what if the form isn't valid?
+		else:
+			return HttpResponse('Failed to save trade')
+	
+	# Prep form with default values	
+	context = RequestContext(request)
+	referrer = None
+	try:
+		referrer = request.META['HTTP_REFERER']
+	except KeyError:
+		pass
+
+	# Updating an existing issue
+	if trade_id:
+		update_trade = Trade.objects.get(pk=trade_id)
+		form = TradeForm(instance = update_trade, initial={'referrer': referrer})
+		context['title'] = 'Update ' + str(update_trade)
+		
+	# Creating a new issue
+	else:
+		series = None
+		volume = None
+		own = True
+		context['title'] = 'Add Trade'
+		form = TradeForm(initial={
+			'series': series, 
+			'own': own, 
+			'volume': volume,
+			'referrer': referrer
+		})
+	# endif
+	
+	return render(request, 'cbtracker/trade_form.html', {'form': form,}, context)
 
 @login_required
 def latestIssue(request, series_id):
@@ -247,6 +307,10 @@ def bought(request, issue_id):
 	try:
 		issue = Issue.objects.get(pk=issue_id)
 		issue.own = True
+		if issue.release_month == '':
+			issue.release_month = issue.cover_month
+		if issue.release_year == '':
+			issue.release_year = issue.cover_year
 		issue.save()
 		return HttpResponse('bought' + issue_id)
 	except:

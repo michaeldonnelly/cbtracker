@@ -65,14 +65,24 @@
 			<li {%if serieslist%}class="active"{%endif%}>							
 				<a href="{% url 'series_list' %}">All Series</a>
 			</li>
-            <li {%if seriesgrouplist%}class="active"{%endif%}>					
+			<li {%if serieslist%}class="active"{%endif%}>							
+				<a href="{% url 'trade_list' %}">Trades</a>
+			</li>
+      <li {%if seriesgrouplist%}class="active"{%endif%}>					
 				<a href="{% url 'series_grouper_list' %}">Series Groups</a> 	
 			</li>
-            <li {%if authorlist%}class="active"{%endif%}>							
+      <li {%if authorlist%}class="active"{%endif%}>							
 				<a href="{% url 'author_list' %}">Authors</a> 		
 			</li>
+      <li>							
+				<a href="/admin/cbtracker">Admin</a> 		
+			</li>
 			<form class="navbar-form navbar-left" role="search">
-				<a href="{% url 'add_issue' %}?{{ addIssueQueryParams }}" class="btn btn-primary" role="button">Add Issue</a>
+				{%if tradelist %}
+					<a href="{% url 'add_trade' %}?{{ addTradeQueryParams }}" class="btn btn-success" role="button">Add Trade</a>
+				{% else %}
+					<a href="{% url 'add_issue' %}?{{ addIssueQueryParams }}" class="btn btn-primary" role="button">Add Issue</a>
+				{% endif %}
 			</form>			
           </ul>
         </div><!--/.nav-collapse -->

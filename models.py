@@ -12,7 +12,8 @@ class Series(models.Model):
 	seriesGrouper = models.ForeignKey('SeriesGrouper', null=True, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
-	
+	#finalIssue = models.IntegerField(null=True, blank=True)
+
 	def latest_issue(self):
 		return Issue.objects.filter(series=self).first()
 	
@@ -45,13 +46,37 @@ class SeriesGrouper(models.Model):
 	def __str__(self):
 		return self.name
 	
+def date_ym(year, month):
+	try:
+		date = str(year) + '-' 
+		if month < 10:
+			date = date + '0'
+		date = date + str(month)
+		return date		
+	except TypeError:
+		return ""
+	
+def date_ymd(year, month, day):
+	date = date_ym(year, month)
+
+	if day == 0:
+		return date
+
+	date = date + '-'
+	if day < 10:
+		date = date + '0'
+	date = date + str(day)
+	return date
+
 class Issue(models.Model):
 	series = models.ForeignKey('Series')
 	issue_number = models.IntegerField()
 	own = models.BooleanField(default='true')
 	release_day = models.IntegerField(default=0, null=False, blank=False)
-	release_month = models.IntegerField()
-	release_year = models.IntegerField()
+	release_month = models.IntegerField(null=True, blank=True)
+	release_year = models.IntegerField(null=True, blank=True)
+	cover_month = models.IntegerField(null=True, blank=True)
+	cover_year = models.IntegerField(null=True, blank=True)
 	variant = models.CharField(max_length=100, blank=True)
 	story_name = models.CharField(max_length=100, blank=True)
 	story_part = models.IntegerField(null=True, blank=True)
@@ -70,41 +95,37 @@ class Issue(models.Model):
 			return author
 		return series.author
 		
+	def cover_date(self):
+		return date_ym(self.cover_year, self.cover_month)
+		
+	def cover_date_with_day(self):
+		return date_ymd(self.cover_year, self.cover_month, self.cover_day)
+		
 	def release_date(self):
-		date = str(self.release_year) + '-' 
-		if self.release_month < 10:
-			date = date + '0'
-		date = date + str(self.release_month)
-		return date		
+		return date_ym(self.release_year, self.release_month)
 		
 	def release_date_with_day(self):
-		date = self.release_date()
-
-		if self.release_day == 0:
-			return date
-
-		date = date + '-'
-		if self.release_day < 10:
-			date = date + '0'
-		date = date + str(self.release_day)
-		return date
+		return date_ymd(self.release_year, self.release_month, self.release_day)
 		
 	def release_delta(self):
-		day = self.release_day
-		if day < 1:
-			day = 1
-		release = datetime.date(self.release_year, self.release_month, day)
+		try:
+			day = self.release_day
+			if day < 1:
+				day = 1
+			release = datetime.date(self.release_year, self.release_month, day)
+		except TypeError:
+			release = datetime.date.today()		
 		delta = release - datetime.date.today()
 		return delta		
 		
 	def far_out(self):
-		return self.release_delta() > datetime.timedelta(days = 13)
+		return self.release_delta() > datetime.timedelta(days = 0)
 
 	def far_back(self):
 		return self.release_delta() < datetime.timedelta(days = -90)	
 
 	class Meta:
-		ordering = ['-release_year', '-release_month', '-release_day', '-issue_number']
+		ordering = ['-cover_year', '-cover_month', '-issue_number']
 
 	def __str__(self):
 		return self.series.name + ' #' + str(self.issue_number) + ' ' + self.variant
@@ -134,7 +155,20 @@ class Publisher(models.Model):
 		if self.imprint_of != None:
 			pub = pub + ' (' + self.imprint_of.name + ')'
 		return pub 
-
+		
+class Trade(models.Model):
+	series = models.ForeignKey('Series')
+	volume = models.IntegerField()
+	own = models.BooleanField(default='true')
+	title = models.CharField(max_length=200, null=True, blank=True)
+		
+	def __str__(self):
+		trade = self.series.name + ' #' + str(self.volume)
+		if self.title != None:
+			trade = trade + ' - ' + self.title
+		return trade
+	
+	
 class List(models.Model):
 	name = models.CharField(max_length=200)
 	updated = models.DateTimeField(auto_now=True)

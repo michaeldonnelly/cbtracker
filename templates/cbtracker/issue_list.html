@@ -14,7 +14,7 @@
 				<div class="checkbox alert alert-info">
 					<label class="">
 						<input type="checkbox" id="showFarOut" unchecked>
-						Show comics shipping more than two weeks out.
+						Show comics that haven't shipped yet
 					</label>
 				</div>
 			</div>
@@ -69,16 +69,30 @@
 	<div class="container">
 		<div class="row">
 			{% if wantlist %}
-			<div class="col-md-6">
+			<div class="col-md-3">
 				<h2>Back Issues</h3>
 			</div>
-			<div class="col-md-2">
-			</div>
-			<div class="col-md-4" align="center">
+			<div class="col-md-3" align="center">
 				<div class="checkbox alert alert-info">
 					<label>
-						<input type="checkbox" id="group-by-series" checked>
-						Group comics by series.
+						<input type="checkbox" id="show-series-year" checked>
+						Show series year
+					</label>
+				</div>
+			</div>
+			<div class="col-md-3" align="center">
+				<div class="checkbox alert alert-info">
+					<label>
+						<input type="checkbox" id="show-target-price" checked>
+						Show target price
+					</label>
+				</div>
+			</div>
+			<div class="col-md-3" align="center">
+				<div class="checkbox alert alert-info">
+					<label>
+						<input type="checkbox" id="group-by-series" unchecked>
+						Group comics by series
 					</label>
 				</div>
 			</div>
@@ -104,18 +118,20 @@
 		</div><!--row-->
 	</div><!--container-->
 
-	<table class='table sortable back-issue-table' {% if wantlist %} style="display: none;" {% endif %}>
+	<table class='table sortable back-issue-table'>
 		<tr>
 			{% if includeSeriesName %}<th class='seriesTitle'>Series</th>{% endif %}
 			<th colspan=2>Issue</th>
 			{% if not wantlist %}		
 				<th>Story</th>
 			{% endif %}
-			<th>Release Date</th>
-			{% if wantlist %}
+			<th>Date</th>
+			{% if includePublisher or wantlist %}
 				<th>Publisher</th>
-				<th>Price</th>
-				<th></th>
+			{% endif %}				
+			{% if wantlist %}
+				<th class='target-price'>Price</th>
+				<th class='target-price'></th>
 			{% endif %}
 		</tr>
 
@@ -124,7 +140,8 @@
 			{% if includeSeriesName %}
 				<td class='seriesTitle'>
 					<a href="{% url 'issues_by_series' series_id=issue.series.id %}">
-						{{issue.series}}
+						<span class='series-name'>{{issue.series}}</span>
+						<span class='series-name' style='display: none;'>{{issue.series.name}}</span>
 					</a>
 				</td>
 			{% endif %}
@@ -142,36 +159,38 @@
 					{% endif %}
 				</td>
 			{% endif %}		
-			<td>{{issue.release_date}}</td>
-			{% if wantlist %}
-			<td>
-				{% if issue.publisher != None %}
-					{{issue.publisher}}
-				{% else %}
-					{% if issue.series.publisher != None %}
-						{{issue.series.publisher}}
+			<td>{{issue.cover_date}}</td>
+			{% if includePublisher or wantlist %}
+				<td>
+					{% if issue.publisher != None %}
+						{{issue.publisher}}
+					{% else %}
+						{% if issue.series.publisher != None %}
+							{{issue.series.publisher}}
+						{% endif %}
 					{% endif %}
-				{% endif %}
-			</td>
-			<td>
-				{% if issue.fair_price > 0 %}
-					${{issue.fair_price}}
-				{% endif %}
-			</td>
-			<td>
-				<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
-			</td>
+				</td>
+			{% endif %}			
+			{% if wantlist %}
+				<td class='target-price'>
+					{% if issue.fair_price > 0 %}
+						${{issue.fair_price}}
+					{% endif %}
+				</td>
+				<td class='target-price'>
+					<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
+				</td>
 			{% endif %}
 		</tr>
 		{% endfor %}
 	</table>	
 
 {%if wantlist %}
-	<table class='table back-issue-table'>
+	<table class='table back-issue-table' style='display: none;'>
 		<tr>
 			<th colspan=2>Series / Issue</th>
-			<th>Publisher / Release Date</th>
-			<th colspan=2>Price</th>
+			<th>Publisher / Date</th>
+			<th colspan=2 class='target-price'>Price</th>
 		</tr>
 
 		{% for series in grouped_by_series %}
@@ -183,38 +202,40 @@
 						<span class="glyphicon glyphicon-triangle-right row-series-{{issue.series.id}}" aria-hidden="true"></span>
 						<span class="glyphicon glyphicon-triangle-bottom row-series-{{issue.series.id}}" style="display: none;"
 						aria-hidden="true"></span>
-						{{issue.series}}
+						<span class='series-name'>{{issue.series}}</span>
+						<span class='series-name' style='display: none;'>{{issue.series.name}}</span>
 					</a>
 				</td>
 				<td>{{issue.series.publisher}}</td>
-				<td>
+				<td class='target-price'>
 					<div class="invisible">$00.00</div>
 				</td>
-				<td>
+				<td class='target-price'>
 					<input type="button" value="Bought" class="btn btn-success btn-xs invisible" />
 				</td>
 			</tr>
 		{% endif %}
 		
-		<tr id="r{{issue.id}} collapsable-row" class="row-series-{{issue.series.id}}" style="display: none;">
+		<tr id="rg{{issue.id}} collapsable-row" class="row-series-{{issue.series.id}}" style="display: none;">
 			<td>
 				<a href="{% url 'issue' issue_id=issue.id %}">
 					{{issue.issue_number}}
 				</a>
 			</td>
 			<td>{{issue.variant}}</td>
-			<td>{{issue.release_date}}</td>
+			<td>{{issue.cover_date}}</td>
 			<td>
 				{% if issue.publisher != None %}
 					{{issue.publisher}}
 				{% endif %}
-
-				{% if issue.fair_price > 0 %}
-					${{issue.fair_price}}
-				{% endif %}
+				<span class='target-price'>
+					{% if issue.fair_price > 0 %}
+						${{issue.fair_price}}
+					{% endif %}
+				</span>
 			</td>
-			<td>
-				<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
+			<td class='target-price'>
+				<input id="boughtG{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
 			</td>
 		</tr>
 		{% endfor %}

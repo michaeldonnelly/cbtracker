@@ -11,12 +11,24 @@ function buy(issue){
 }
 
 function disableRow(issue) {
-	rowID = 'r' + issue;
+	strikeoutRow('r' + issue);
+	strikeoutRow('rg' + issue + ' collapsable-row');
+	disableButton('bought' + issue);
+	disableButton('boughtG' + issue);
+}
+
+function strikeoutRow(rowID) {
 	row = document.getElementById(rowID);
-	row.style.setProperty("text-decoration", "line-through");
-	buttonID = 'bought' + issue;
+	if (row != null) {
+		row.style.setProperty("text-decoration", "line-through");
+	}
+}
+
+function disableButton(buttonID) {
 	button = document.getElementById(buttonID);
-    button.disabled = true;
+	if (button != null) {
+	    button.disabled = true;
+	}
 }
 
 
@@ -30,6 +42,14 @@ $('#showFarOut').change(function () {
 
 $('.collapser').click(function () {
     $('.row-' + this.id).toggle();
+});
+
+$('#show-series-year').change(function () {
+    $('.series-name').toggle();
+});
+
+$('#show-target-price').change(function () {
+    $('.target-price').toggle();
 });
 
 $('#group-by-series').change(function () {
