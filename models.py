@@ -167,6 +167,9 @@ class Trade(models.Model):
 	def release_date(self):
 		return date_ym(self.release_year, self.release_month)
 		
+	class Meta:
+		ordering = ['series', 'volume']
+
 	def __str__(self):
 		trade = self.series.name + ' #' + str(self.volume)
 		if self.title != None:
