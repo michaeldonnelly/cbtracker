@@ -161,6 +161,11 @@ class Trade(models.Model):
 	volume = models.IntegerField()
 	own = models.BooleanField(default='true')
 	title = models.CharField(max_length=200, null=True, blank=True)
+	BINDING_CHOICES = (
+		(0, 'Paperback'),
+		(1, 'Hardcover'),
+	)
+	binding = models.IntegerField(choices = BINDING_CHOICES, default=0) 
 	release_month = models.IntegerField(null=True, blank=True)
 	release_year = models.IntegerField(null=True, blank=True)
 	

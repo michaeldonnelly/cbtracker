@@ -7,7 +7,15 @@
 				<div class="checkbox alert alert-info">
 					<label class="">
 						<input type="checkbox" id="showUnreleased" checked>
-						Show trades that haven't been released yet
+						Show unreleased trades
+					</label>
+				</div>
+			</div>
+			<div class="col-md-4" align="center">
+				<div class="checkbox alert alert-info">
+					<label class="">
+						<input type="checkbox" id="wantListOnly" unchecked>
+						Want list only
 					</label>
 				</div>
 			</div>
@@ -27,6 +35,8 @@
 				class="unreleased danger"
 			{% elif not wantlist and not trade.own %} 
 				class='danger' 
+			{% else %}
+				class='owned'
 			{% endif %}
 		    id="r{{trade.id}}" 
 		> 

@@ -59,3 +59,7 @@ $('#showUnreleased').change(function () {
     $('.unreleased').toggle();
 });
 
+$('#wantListOnly').change(function () {
+    $('.owned').toggle();
+});
+
