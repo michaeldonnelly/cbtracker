@@ -3,9 +3,14 @@ from django.contrib import admin
 # Register your models here.
 from .models import Series, Issue, Author, Publisher, SeriesGrouper, Trade, List
 
+def make_not_current(modeladmin, request, queryset):
+	queryset.update(current=False)
+make_not_current.short_description = "Set selected series as no longer current"
+
 class SeriesAdmin(admin.ModelAdmin):
 	list_display = ['name', 'publisher', 'seriesGrouper', 'updated', 'created']
 	list_filter = ['current']
+	actions = [make_not_current]
 
 class IssueAdmin(admin.ModelAdmin):
 	def series(self):

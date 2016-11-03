@@ -12,6 +12,20 @@ import csv
 from cbtracker.models import Issue, Series, SeriesGrouper, Author, List, Trade
 from cbtracker.forms import IssueForm, TradeForm
 
+def groupedBySeries(issues):
+	series = []
+	for i in issues:
+		if not i.series.id in series:
+			series.append(i.series.id)
+	orderedSeries = Series.objects.filter(id__in=series).order_by('sort_name')
+	all_issues_in_series = []
+	for s in orderedSeries:
+		issues_in_s = issues.filter(series = s)
+		all_issues_in_series.append(issues_in_s)
+	return all_issues_in_series
+	
+	
+	
 class Wantlist(ListView):
 	model = Issue
 	template = 'cbtracker/issue_list.html'
@@ -43,18 +57,7 @@ class Wantlist(ListView):
 			old_issue_ids = [issue.id for issue in Issue.objects.filter(own=False) if not issue.current()]
 			historic_issue_ids = current_back_issue_ids + old_issue_ids
 			context['historic'] = Issue.objects.filter(id__in=historic_issue_ids).order_by('series', 'issue_number')
-
-			# get info for collapsable sections
-			series = []
-			for i in context['historic']:
-				if not i.series.id in series:
-					series.append(i.series.id)
-			all_issues_in_series = []
-			for s in series:
-				issues_in_s = context['historic'].filter(series = s)
-				all_issues_in_series.append(issues_in_s)
-			context['grouped_by_series'] = all_issues_in_series
-			
+			context['grouped_by_series'] = groupedBySeries(context['historic'])
 			
 		return context
 		
@@ -120,11 +123,12 @@ class IssueList(ListView):
 		try:
 			author_id = self.kwargs['author_id']
 			author = Author.objects.get(pk = author_id)
-			context['historic'] = Issue.objects.filter(Q(series__author = author) | Q(author = author)).order_by('cover_year', 'cover_month', 'series__name')
+			context['historic'] = Issue.objects.filter(Q(series__author = author) & Q(author = None)| Q(author = author)).order_by('cover_year', 'cover_month', 'series__name')
 			context['includeSeriesName'] = True
 			context['title'] = author	
 			context['includePublisher'] = True
 			context['addIssueQueryParams'] = 'author=' + author_id
+			context['grouped_by_series'] = groupedBySeries(context['historic'])
 			return context
 		except KeyError:
 			pass
@@ -202,12 +206,12 @@ def issue(request, issue_id='', series_id='', author_id='', list_id='', return_t
 		
 		context['title'] = 'Add Comic'
 		if series_id:
-			own = True
+			own = False
 			series = Series.objects.get(pk=series_id)
 			latest_issue = series.latest_issue()
 			if latest_issue:
 				issue_number = latest_issue.issue_number + 1
-				own = latest_issue.own
+				#own = latest_issue.own
 				if latest_issue.cover_month < 12:
 					cover_year = latest_issue.cover_year
 					cover_month = latest_issue.cover_month + 1

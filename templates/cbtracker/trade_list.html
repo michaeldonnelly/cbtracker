@@ -32,7 +32,7 @@
 		{% for trade in list %}
 		<tr
 			{% if trade.unreleased %} 
-				class="unreleased danger"
+				class='unreleased warning'
 			{% elif not wantlist and not trade.own %} 
 				class='danger' 
 			{% else %}

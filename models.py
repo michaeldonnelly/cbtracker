@@ -34,7 +34,7 @@ class Series(models.Model):
 	def save(self, *args, **kwargs):
 		#self.sort_name = self.remove_article(self.name)
 		super(Series, self).save(*args, **kwargs)	
-
+		
 class SeriesGrouper(models.Model):
 	name = models.CharField(max_length=200)
 	updated = models.DateTimeField(auto_now=True)
@@ -71,7 +71,7 @@ def date_ymd(year, month, day):
 class Issue(models.Model):
 	series = models.ForeignKey('Series')
 	issue_number = models.IntegerField()
-	own = models.BooleanField(default='true')
+	own = models.BooleanField(default='false')
 	release_day = models.IntegerField(default=0, null=False, blank=False)
 	release_month = models.IntegerField(null=True, blank=True)
 	release_year = models.IntegerField(null=True, blank=True)
