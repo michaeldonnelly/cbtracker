@@ -112,7 +112,10 @@ class Issue(models.Model):
 			day = self.release_day
 			if day < 1:
 				day = 1
-			release = datetime.date(self.release_year, self.release_month, day)
+			month = self.release_month
+			if month < 1:
+				month = 1
+			release = datetime.date(self.release_year, month, day)
 		except TypeError:
 			release = datetime.date.today()		
 		delta = release - datetime.date.today()
