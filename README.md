@@ -25,5 +25,9 @@ Comic book want list and collection database
 * Pull list (series)
  * Includes series if it, its grouper, or its author is marked to be pulled
  
+## Using It
+* Want list - while shopping
+* Pull list - weekly to add new issues as they come out
+* CSV import - bulk add an existing collection
  
 
