@@ -9,6 +9,7 @@ class Series(models.Model):
 	publisher = models.ForeignKey('Publisher', null=True, blank=True)
 	start_year = models.IntegerField()
 	current = models.BooleanField(default=False)
+	pullList = models.BooleanField(default=False)
 	seriesGrouper = models.ForeignKey('SeriesGrouper', null=True, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
@@ -37,6 +38,7 @@ class Series(models.Model):
 		
 class SeriesGrouper(models.Model):
 	name = models.CharField(max_length=200)
+	pullList = models.BooleanField(default=False)
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
 
@@ -71,7 +73,9 @@ def date_ymd(year, month, day):
 class Issue(models.Model):
 	series = models.ForeignKey('Series')
 	issue_number = models.IntegerField()
-	own = models.BooleanField(default='false')
+	own = models.BooleanField(default=False)
+	want = models.BooleanField(default=True)
+	ordered = models.BooleanField(default=False)
 	release_day = models.IntegerField(default=0, null=False, blank=False)
 	release_month = models.IntegerField(null=True, blank=True)
 	release_year = models.IntegerField(null=True, blank=True)
@@ -109,13 +113,17 @@ class Issue(models.Model):
 		
 	def release_delta(self):
 		try:
-			day = self.release_day
-			if day < 1:
-				day = 1
+			year = self.release_year
 			month = self.release_month
+			day = self.release_day
+			if year < 1:
+				year = self.cover_year
+				month = self.cover_month
 			if month < 1:
 				month = 1
-			release = datetime.date(self.release_year, month, day)
+			if day < 1:
+				day = 1
+			release = datetime.date(year, month, day)
 		except TypeError:
 			release = datetime.date.today()		
 		delta = release - datetime.date.today()
@@ -135,6 +143,7 @@ class Issue(models.Model):
 
 class Author(models.Model):
 	name = models.CharField(max_length=200)
+	pullList = models.BooleanField(default=False)
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
 

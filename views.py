@@ -24,8 +24,6 @@ def groupedBySeries(issues):
 		all_issues_in_series.append(issues_in_s)
 	return all_issues_in_series
 	
-	
-	
 class Wantlist(ListView):
 	model = Issue
 	template = 'cbtracker/issue_list.html'
@@ -72,7 +70,28 @@ class Picklist(ListView):
 		indy = Series.objects.filter(current=True).exclude(publisher__in=(1,3,4))
 		context['list'] = chain(indy, dc, marvel)
 		context['picklist'] = True
+		context['serieslist'] = True
 		return context
+		
+class Pulllist(ListView):
+	model = Series
+	def get_context_data(self, **kwargs):
+		context = super(Pulllist, self).get_context_data(**kwargs)
+		context['title'] = 'Pull List'
+		context['list'] = Series.objects.filter(
+			Q(current = True) &
+			(
+			Q(pullList = True) |
+			Q(seriesGrouper__pullList = True) |
+			Q(author__pullList = True) 
+			))			
+		context['authors'] = Author.objects.filter(pullList = True)
+		context['seriesGroupers'] = SeriesGrouper.objects.filter(pullList = True)
+		context['pulllist'] = True
+		context['serieslist'] = True
+		return context
+	
+	
 	
 # All Series
 class SeriesList(ListView):

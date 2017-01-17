@@ -56,7 +56,11 @@
 			</td>
 			{% if wantlist %}
 				<td>
-					<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
+					{% if issue.ordered %}
+						<input id="bought{{issue.id}}" type="button" value="Received" class="btn btn-warning btn-xs" onclick="buy({{issue.id}});" />
+					{% else %}
+						<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
+					{% endif %}
 				</td>
 			{% endif %}
 		</tr>
@@ -102,9 +106,9 @@
 					{% endif %}
 				</div>
 				{% if series.publisher %}
-					<div class="col-md-4">
-							<h2>{{series.publisher}}</h2>
-					</div> 
+				<div class="col-md-4">
+					<h2>{{series.publisher}}</h2>
+				</div> 
 				{% endif %}
 			{% endif %}
 			{% if grouped_by_series %}
@@ -116,15 +120,26 @@
 						</label>
 					</div>
 				</div>
-			{% endif %}
-			
+			{% endif %}			
 		</div><!--row-->
+		{% if series.seriesGrouper %}
+		<div class="row">
+			<div class="col-md-6">
+				<h3>Part of 
+					<a href="{% url 'issues_by_group' seriesGrouper_id=series.seriesGrouper.id %}">
+						{{series.seriesGrouper}}
+					</a>
+				</h3>
+			</div>
+		</div>
+		{% endif %}
 	</div><!--container-->
 
 	<table class='table sortable back-issue-table'>
 		<tr>
 			{% if includeSeriesName %}<th class='seriesTitle'>Series</th>{% endif %}
-			<th colspan=2>Issue</th>
+			<th>Issue</th>
+			<th></th> <!-- This is here (rather than a colspan=2) to prevent the column sorting from being off by one -->
 			{% if not wantlist %}		
 				<th>Story</th>
 			{% endif %}
@@ -133,58 +148,64 @@
 				<th>Publisher</th>
 			{% endif %}				
 			{% if wantlist %}
-				<th class='target-price'>Price</th>
+				<th class='target-price'>Value</th>
 				<th class='target-price'></th>
 			{% endif %}
 		</tr>
 
-		{% for issue in historic %}
-		<tr id="r{{issue.id}}" {% if not wantlist and not issue.own %} class='danger' {% endif %}>
-			{% if includeSeriesName %}
-				<td class='seriesTitle'>
-					<a href="{% url 'issues_by_series' series_id=issue.series.id %}">
-						<span class='series-name'>{{issue.series}}</span>
-						<span class='series-name' style='display: none;'>{{issue.series.name}}</span>
+		{% for issue in historic %} 
+			{% if not wantlist or issue.want %}
+			<tr id="r{{issue.id}}" {% if not wantlist and not issue.own %} class='danger' {% endif %}>
+				{% if includeSeriesName %}
+					<td class='seriesTitle'>
+						<a href="{% url 'issues_by_series' series_id=issue.series.id %}">
+							<span class='series-name'>{{issue.series}}</span>
+							<span class='series-name' style='display: none;'>{{issue.series.name}}</span>
+						</a>
+					</td>
+				{% endif %}
+				<td>
+					<a href="{% url 'issue' issue_id=issue.id %}">
+						{{issue.issue_number}}
 					</a>
 				</td>
-			{% endif %}
-			<td>
-				<a href="{% url 'issue' issue_id=issue.id %}">
-					{{issue.issue_number}}
-				</a>
-			</td>
-			<td>{{issue.variant}}</td>
-			{% if not wantlist %}	
-				<td>
-					{{issue.story_name}}
-					{% if issue.story_part %}
-						part {{issue.story_part}}
-					{% endif %}
-				</td>
-			{% endif %}		
-			<td>{{issue.cover_date}}</td>
-			{% if includePublisher or wantlist %}
-				<td>
-					{% if issue.publisher != None %}
-						{{issue.publisher}}
-					{% else %}
-						{% if issue.series.publisher != None %}
-							{{issue.series.publisher}}
+				<td>{{issue.variant}}</td>
+				{% if not wantlist %}	
+					<td>
+						{{issue.story_name}}
+						{% if issue.story_part %}
+							part {{issue.story_part}}
 						{% endif %}
-					{% endif %}
-				</td>
-			{% endif %}			
-			{% if wantlist %}
-				<td class='target-price'>
-					{% if issue.fair_price > 0 %}
-						${{issue.fair_price}}
-					{% endif %}
-				</td>
-				<td class='target-price'>
-					<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
-				</td>
+					</td>
+				{% endif %}		
+				<td>{{issue.cover_date}}</td>
+				{% if includePublisher or wantlist %}
+					<td>
+						{% if issue.publisher != None %}
+							{{issue.publisher}}
+						{% else %}
+							{% if issue.series.publisher != None %}
+								{{issue.series.publisher}}
+							{% endif %}
+						{% endif %}
+					</td>
+				{% endif %}			
+				{% if wantlist %}
+					<td class='target-price'>
+						{% if issue.fair_price > 0 %}
+							${{issue.fair_price}}
+						{% endif %}
+					</td>
+					<td class='target-price'>
+						{% if issue.ordered %}
+							<input id="bought{{issue.id}}" type="button" value="Received" class="btn btn-warning btn-xs" onclick="buy({{issue.id}});" />
+						{% else %}
+							<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
+						{% endif %}				
+					</td>
+				{% endif %}
+			</tr>
 			{% endif %}
-		</tr>
 		{% endfor %}
 	</table>	
 
@@ -194,7 +215,7 @@
 			<th colspan=2>Series / Issue</th>
 			<th>Publisher / Date</th>
 			{% if wantlist %}
-				<th colspan=2 class='target-price'>Price</th>
+				<th colspan=2 class='target-price'>Value</th>
 			{% endif %}
 		</tr>
 

@@ -1,6 +1,29 @@
 {% extends "cbtracker/base.html" %}
 
 {% block content %}
+
+{% if pulllist %}
+<h3>Authors</h3>
+<div class="list-group">
+	{% for author in authors %}
+		<a href="{% url 'issues_by_author' author_id=author.id %}" class="list-group-item">
+			{{author.name}}
+		</a>
+	{% endfor %}
+</div>
+
+<h3>Series Groups</h3>
+<div class="list-group">
+	{% for seriesGrouper in seriesGroupers %}
+		<a href="{% url 'issues_by_group' seriesGrouper_id=seriesGrouper.id %}" class="list-group-item">
+			{{seriesGrouper.name}}
+		</a>
+	{% endfor %}
+</div>
+
+<h3>Series</h3>
+{% endif %}
+
 <table class='table sortable'>
 	<tr>
 		<th class='seriesTitle'>Series</th>
@@ -37,5 +60,4 @@
 	</tr>
 	{% endfor %}
 </table>		
-
 {% endblock %}
