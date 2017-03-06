@@ -90,6 +90,7 @@ class Issue(models.Model):
 	price_source = models.CharField(max_length=100, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
+	annual = models.BooleanField(default=False)
 
 	def current(self):
 		return self.series.current
@@ -139,7 +140,9 @@ class Issue(models.Model):
 		ordering = ['-cover_year', '-cover_month', '-issue_number']
 
 	def __str__(self):
-		return self.series.name + ' #' + str(self.issue_number) + ' ' + self.variant
+		name = self.series.name
+		name = name + ' #' + str(self.issue_number) + ' ' + self.variant
+		return name 
 
 class Author(models.Model):
 	name = models.CharField(max_length=200)

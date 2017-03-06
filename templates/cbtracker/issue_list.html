@@ -41,6 +41,7 @@
 			</td>
 			<td>
 				<a href="{% url 'issue' issue_id=issue.id %}">
+					{% if issue.annual %}Annual{% endif %}
 					{{issue.issue_number}}
 				</a>
 			</td>			
@@ -166,6 +167,7 @@
 				{% endif %}
 				<td>
 					<a href="{% url 'issue' issue_id=issue.id %}">
+						{% if issue.annual %}Annual{% endif %}
 						{{issue.issue_number}}
 					</a>
 				</td>
@@ -248,6 +250,7 @@
 			class="row-series-{{issue.series.id}} {% if not wantlist and not issue.own %} danger {% endif %}" >
 			<td>
 				<a href="{% url 'issue' issue_id=issue.id %}">
+					{% if issue.annual %}Annual{% endif %}
 					{{issue.issue_number}}
 				</a>
 			</td>
