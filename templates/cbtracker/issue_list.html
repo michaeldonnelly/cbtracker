@@ -160,7 +160,14 @@
 
 		{% for issue in historic %} 
 			{% if not wantlist or issue.want %}
-			<tr id="r{{issue.id}}" {% if not wantlist and not issue.own %} class='danger' {% endif %}>
+			<tr id="r{{issue.id}}" 
+				{% if not wantlist and not issue.own %} class=
+					{% if issue.ordered %}
+						'warning'
+					{% else %}
+						'danger'
+					{% endif %}
+				{% endif %}>			
 				{% if includeSeriesName %}
 					<td class='seriesTitle'>
 						<a href="{% url 'issues_by_series' series_id=issue.series.id %}">
@@ -253,7 +260,17 @@
 		{% endif %}
 		
 		<tr id="rg{{issue.id}} collapsable-row" style="display: none;"
-			class="row-series-{{issue.series.id}} {% if not wantlist and not issue.own %} danger {% endif %}" >
+			class="row-series-{{issue.series.id}} 
+				{% if not wantlist %}
+					{% if not issue.own %} 
+						{% if issue.ordered %}
+							warning
+						{% else %}
+							danger
+						{% endif %}
+					{% endif %}						
+				{% endif %}				
+			" >
 			<td>
 				<a href="{% url 'issue' issue_id=issue.id %}">
 					{% if issue.annual %}Annual{% endif %}
