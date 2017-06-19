@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" height="450" width="450">
+	<path d="M40,0 h370 a40,40 0 0 1 40,40 v370 a40,40 0 0 1 -40,40 h-370 a40,40 0 0 1 -40,-40 v-370 a40,40 0 0 1 40,-40 z" fill="black" stroke="black" stroke-width="1" />
+	<polygon points="91,49 212,128 225,55 248,123 337,22 319,133 421,112 333,177 431,194 
+	310,238 408,295 316,286 371,398 255,318 159,426 
+	190,300 63,359 
+	138,260 14,237 143,210 68,153 164,155" 
+  	style="fill:yellow;fill-rule:nonzero;"/>
+	<text fill="black" font-size="140" font-family="Impact" font-style="italic" x="140" y="278">CT</text>
+</svg>
