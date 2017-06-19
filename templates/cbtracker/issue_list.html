@@ -42,7 +42,9 @@
 			<td>
 				<a href="{% url 'issue' issue_id=issue.id %}">
 					{% if issue.annual %}Annual{% endif %}
+					{% if issue.special %}Special{% endif %}
 					{{issue.issue_number}}
+					{% if issue.special %}<br>{{issue.story_name}}{% endif %}
 				</a>
 			</td>			
 			<td>{{issue.release_date_with_day}}</td>
@@ -181,7 +183,9 @@
 				<td>
 					<a href="{% url 'issue' issue_id=issue.id %}">
 						{% if issue.annual %}Annual{% endif %}
+						{% if issue.special %}Special{% endif %}
 						{{issue.issue_number}}
+						{% if issue.special %}<br>{{issue.story_name}}{% endif %}
 					</a>
 				</td>
 				<td>{{issue.variant}}</td>
@@ -284,6 +288,7 @@
 					{% if issue.annual %}Annual{% endif %}
 					{% if issue.special %}Special{% endif %}
 					{{issue.issue_number}}
+					{% if issue.special %}<br>{{issue.story_name}}{% endif %}
 				</a>
 			</td>
 			<td>{{issue.variant}}</td>
