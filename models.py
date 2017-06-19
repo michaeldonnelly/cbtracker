@@ -131,8 +131,7 @@ class Issue(models.Model):
 		if author:
 			if author.pullList:
 				return True
-		#if issueAuthor.pullList:
-		#	return True
+
 		
 	def cover_date(self):
 		return date_ym(self.cover_year, self.cover_month)
@@ -241,6 +240,18 @@ class Trade(models.Model):
 		if self.title != None:
 			trade = trade + ' - ' + self.title
 		return trade
+		
+class Favorite(models.Model):
+	name = models.CharField(max_length=200)
+	relative_url = models.CharField(max_length=40)
+	updated = models.DateTimeField(auto_now=True)
+	created = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ['name']
+		
+	def __str__(self):
+		return self.name 
 		
 class List(models.Model):
 	name = models.CharField(max_length=200)

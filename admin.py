@@ -3,7 +3,7 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
 # Register your models here.
-from .models import Series, Issue, Author, Publisher, Tag, SeriesGrouper, Trade, List
+from .models import Series, Issue, Author, Publisher, Tag, SeriesGrouper, Trade, Favorite, List
 
 # Admin drop down functions
 def make_not_current(modeladmin, request, queryset):
@@ -66,6 +66,8 @@ class IssueAdmin(ImportExportModelAdmin):
 	resource_class = IssueResource
 	actions = [ordered, add_to_pulllist, wanted, not_wanted, tag_xmen]
 
+class FavoriteAdmin(admin.ModelAdmin):
+	list_display = ['name', 'relative_url']
 
 class TradeAdmin(admin.ModelAdmin):
 	ordering = ('series__name', 'volume')
@@ -74,7 +76,6 @@ class PullableAdmin(admin.ModelAdmin):
 	list_filter = ['pullList']
 	actions = [add_to_pulllist, remove_from_pulllist]
 	
-	
 admin.site.register(Series, SeriesAdmin)
 admin.site.register(Issue, IssueAdmin)
 admin.site.register(Author, PullableAdmin)
@@ -82,5 +83,5 @@ admin.site.register(Tag)
 admin.site.register(Publisher)
 admin.site.register(SeriesGrouper, PullableAdmin)
 admin.site.register(Trade, TradeAdmin)
-#admin.site.register(List)
+admin.site.register(Favorite, FavoriteAdmin)
 

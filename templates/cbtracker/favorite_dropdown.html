@@ -1,0 +1,5 @@
+<ul class="dropdown-menu">
+	{% for favorite in favorites %}
+		<li><a href="{{favorite.relative_url}}">{{favorite.name}}</a>
+	{% endfor %}
+</ul>
