@@ -86,6 +86,7 @@ def date_ymd(year, month, day):
 class Issue(models.Model):
 	series = models.ForeignKey('Series')
 	issue_number = models.IntegerField()
+	reading_order = models.IntegerField(null=True, blank=True)	
 	annual = models.BooleanField(default=False)
 	special = models.BooleanField(default=False)
 	release_day = models.IntegerField(default=0, null=False, blank=False)
@@ -108,7 +109,6 @@ class Issue(models.Model):
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
 	tags = models.ManyToManyField(Tag, blank=True)
-	reading_order = models.IntegerField(null=True, blank=True)
 
 	def current(self):
 		return self.series.current

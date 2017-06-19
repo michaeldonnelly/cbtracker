@@ -155,6 +155,8 @@
 			{% if wantlist %}
 				<th class='target-price'>Value</th>
 				<th class='target-price'></th>
+			{% else %}
+				<th>CMRO</th>
 			{% endif %}
 		</tr>
 
@@ -218,6 +220,12 @@
 							<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
 						{% endif %}				
 					</td>
+				{% else %}
+					<td>
+					{% if issue.reading_order %}
+						{{issue.reading_order}}
+					{% endif %}
+					</td>
 				{% endif %}
 			</tr>
 			{% endif %}
@@ -274,6 +282,7 @@
 			<td>
 				<a href="{% url 'issue' issue_id=issue.id %}">
 					{% if issue.annual %}Annual{% endif %}
+					{% if issue.special %}Special{% endif %}
 					{{issue.issue_number}}
 				</a>
 			</td>
