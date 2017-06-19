@@ -1,6 +1,18 @@
 from django.db import models
 import datetime
 
+class Tag(models.Model):
+	name = models.CharField(max_length=200)	
+	#issues - models.ManyToManyField(Issue)
+	updated = models.DateTimeField(auto_now=True)
+	created = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ['name']
+	
+	def __str__(self):
+		return self.name
+
 class Series(models.Model):
 	name = models.CharField(max_length=200)
 	sort_name = models.CharField(max_length=200)
@@ -14,6 +26,7 @@ class Series(models.Model):
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
 	#finalIssue = models.IntegerField(null=True, blank=True)
+	tags = models.ManyToManyField(Tag, blank=True)
 
 	def latest_issue(self):
 		return Issue.objects.filter(series=self).first()
@@ -35,7 +48,7 @@ class Series(models.Model):
 	def save(self, *args, **kwargs):
 		#self.sort_name = self.remove_article(self.name)
 		super(Series, self).save(*args, **kwargs)	
-		
+
 class SeriesGrouper(models.Model):
 	name = models.CharField(max_length=200)
 	pullList = models.BooleanField(default=False)
@@ -73,32 +86,53 @@ def date_ymd(year, month, day):
 class Issue(models.Model):
 	series = models.ForeignKey('Series')
 	issue_number = models.IntegerField()
-	own = models.BooleanField(default=False)
-	want = models.BooleanField(default=True)
-	ordered = models.BooleanField(default=False)
+	annual = models.BooleanField(default=False)
+	special = models.BooleanField(default=False)
 	release_day = models.IntegerField(default=0, null=False, blank=False)
 	release_month = models.IntegerField(null=True, blank=True)
 	release_year = models.IntegerField(null=True, blank=True)
 	cover_month = models.IntegerField(null=True, blank=True)
 	cover_year = models.IntegerField(null=True, blank=True)
+	own = models.BooleanField(default=False)
+	might_own = models.BooleanField(default=False)
+	want = models.BooleanField(default=True)
+	ordered = models.BooleanField(default=False)
+	pullList = models.BooleanField(default=False)
+	fair_price = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+	price_source = models.CharField(max_length=100, blank=True)
 	variant = models.CharField(max_length=100, blank=True)
 	story_name = models.CharField(max_length=100, blank=True)
 	story_part = models.IntegerField(null=True, blank=True)
 	author = models.ForeignKey('Author', null=True, blank=True)
 	publisher = models.ForeignKey('Publisher', null=True, blank=True)
-	fair_price = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-	price_source = models.CharField(max_length=100, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
-	annual = models.BooleanField(default=False)
+	tags = models.ManyToManyField(Tag, blank=True)
+	reading_order = models.IntegerField(null=True, blank=True)
 
 	def current(self):
 		return self.series.current
 		
 	def issue_author(self):
-		if author:
+		if self.author:
 			return author
-		return series.author
+		return self.series.author
+		
+	def pulled(self):
+		if self.pullList:
+			return True
+		if self.series.pullList:
+			return True
+		group = self.series.seriesGrouper
+		if group:
+			if group.pullList:
+				return True
+		author = self.issue_author()
+		if author:
+			if author.pullList:
+				return True
+		#if issueAuthor.pullList:
+		#	return True
 		
 	def cover_date(self):
 		return date_ym(self.cover_year, self.cover_month)
@@ -207,8 +241,7 @@ class Trade(models.Model):
 		if self.title != None:
 			trade = trade + ' - ' + self.title
 		return trade
-	
-	
+		
 class List(models.Model):
 	name = models.CharField(max_length=200)
 	updated = models.DateTimeField(auto_now=True)

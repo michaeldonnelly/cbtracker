@@ -23,6 +23,55 @@
 	<!-- Bootstrap theme -->
     <link href="{% static 'cbtracker/css/bootstrap-theme.min.css' %}" rel="stylesheet">
 
+	<!-- Icons -->
+	<!--
+		<link href="{% static 'cbtracker/ct-icon.svg' %}" rel="mask-icon" color="orange">
+	-->
+	
+	<!-- For old IEs -->
+	<link rel="shortcut icon" href="{% static 'cbtracker/favicons/favicon.ico' %}" />
+
+	<!-- For new browsers - multisize ico  -->
+	<link rel="icon" type="image/x-icon" sizes="16x16 32x32" href="{% static 'cbtracker/favicons/favicon.ico' %}">
+
+	<!-- For iPad with high-resolution Retina display running iOS ≥ 7: -->
+	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="{% static 'cbtracker/favicons/favicon-152.png' %}">
+
+	<!-- For iPad with high-resolution Retina display running iOS ≤ 6: -->
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="{% static 'cbtracker/favicons/favicon-144.png' %}">
+
+	<!-- For iPhone with high-resolution Retina display running iOS ≥ 7: -->
+	<link rel="apple-touch-icon-precomposed" sizes="120x120" href="{% static 'cbtracker/favicons/favicon-120.png' %}">
+
+	<!-- For iPhone with high-resolution Retina display running iOS ≤ 6: -->
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{% static 'cbtracker/favicons/favicon-114.png' %}">
+
+	<!-- For iPhone 6+ -->
+	<link rel="apple-touch-icon-precomposed" sizes="180x180" href="{% static 'cbtracker/favicons/favicon-180.png' %}">
+
+	<!-- For first- and second-generation iPad: -->
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{% static 'cbtracker/favicons/favicon-72.png' %}">
+
+	<!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+	<link rel="apple-touch-icon-precomposed" href="{% static 'cbtracker/favicons/favicon-57.png' %}">
+
+	<!-- For Old Chrome -->
+	<link rel="icon" href="{% static 'cbtracker/favicons/favicon-32.png' %}" sizes="32x32">
+
+	<!-- For IE10 Metro -->
+	<meta name="msapplication-TileColor" content="#FFFFFF">
+	<meta name="msapplication-TileImage" content="favicon-144.png">
+	<meta name="theme-color" content="#ffffff">
+
+	<!-- Chrome for Android -->
+	<link rel="manifest" href="manifest.json">
+	<link rel="icon" sizes="192x192" href="{% static 'cbtracker/favicons/favicon-192.png' %}">
+
+
+
+
+
+
 	{% block headers %}{% endblock %}
 	
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -64,12 +113,13 @@
 					<li><a href="{% url 'pulllist' %}">Pull List</a>
 					<li><a href="{% url 'picklist' %}">Current</a>
 					<li><a href="{% url 'series_list' %}">All</a></li>
+					<li><a href="{% url 'series_grouper_list' %}">Series Groups</a></li> 	
 				</ul>
 			</li>
 
 
 		    <li {%if seriesgrouplist%}class="active"{%endif%}>					
-				<a href="{% url 'series_grouper_list' %}">Series Groups</a> 	
+				<a href="{% url 'tag_list' %}">Tags</a> 	
 			</li>
 			<li {%if tradelist%}class="active"{%endif%}>							
 				<a href="{% url 'trade_list' %}">Trades</a>

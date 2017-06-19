@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from itertools import chain
 import csv
 
-from cbtracker.models import Issue, Series, SeriesGrouper, Author, List, Trade
+from cbtracker.models import Issue, Series, SeriesGrouper, Author, List, Trade, Tag
 from cbtracker.forms import IssueForm, TradeForm
 
 def groupedBySeries(issues):
@@ -65,10 +65,11 @@ class Picklist(ListView):
 	def get_context_data(self, **kwargs):
 		context = super(Picklist, self).get_context_data(**kwargs)
 		context['title'] = 'Current Series'
-		marvel = Series.objects.filter(current=True, publisher=1)
-		dc = Series.objects.filter(current=True, publisher__in=(3,4))
-		indy = Series.objects.filter(current=True).exclude(publisher__in=(1,3,4))
-		context['list'] = chain(indy, dc, marvel)
+		#marvel = Series.objects.filter(current=True, publisher=1)
+		#dc = Series.objects.filter(current=True, publisher__in=(3,4))
+		#indy = Series.objects.filter(current=True).exclude(publisher__in=(1,3,4))
+		#context['list'] = chain(indy, dc, marvel)
+		context['list'] = Series.objects.filter(current=True)
 		context['picklist'] = True
 		context['serieslist'] = True
 		return context
@@ -90,8 +91,6 @@ class Pulllist(ListView):
 		context['pulllist'] = True
 		context['serieslist'] = True
 		return context
-	
-	
 	
 # All Series
 class SeriesList(ListView):
@@ -120,6 +119,16 @@ class AuthorList(ListView):
 		context['list'] = Author.objects.all()
 		context['authorlist'] = True
 		return context		
+
+class TagList(ListView):
+	model = Tag
+	def get_context_data(self, **kwargs):
+		context = super(TagList, self).get_context_data(**kwargs)
+		context['title'] = 'Tags'
+		context['list'] = Tag.objects.all()
+		context['taglist'] = True
+		return context		
+	
 
 class IssueList(ListView):
 	model = Issue
@@ -153,6 +162,19 @@ class IssueList(ListView):
 		except KeyError:
 			pass
 			
+		# Tag
+		try:
+			tag_id = self.kwargs['tag_id']
+			tag = Tag.objects.get(pk = tag_id)
+			#context['historic'] = Issue.objects.filter(tags = tag)
+			context['historic'] = Issue.objects.filter(Q(series__tags = tag) | Q(tags = tag)).order_by('cover_year', 'cover_month', 'series__name')
+			context['title'] = 'Tag: ' + str(tag)
+			context['includeSeriesName'] = True
+			return context
+		except KeyError:
+			pass
+
+
 		# Series
 		series_id = self.kwargs['series_id']
 		series = Series.objects.get(id=series_id)
@@ -161,6 +183,7 @@ class IssueList(ListView):
 		context['historic'] = Issue.objects.filter(series = series_id).order_by('issue_number')
 		context['addIssueQueryParams'] = 'series=' + series_id
 		return context
+		
 
 class TradeList(ListView):
 	model = Trade
@@ -258,6 +281,8 @@ def issue(request, issue_id='', series_id='', author_id='', list_id='', return_t
 			'issue_number': issue_number,
 			'cover_year': cover_year,
 			'cover_month': cover_month,
+			'release_year': cover_year,
+			'release_month': cover_month,
 			'story_name': story_name,
 			'story_part': story_part,
 			'fair_price': fair_price,

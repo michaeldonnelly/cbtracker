@@ -1,0 +1,11 @@
+{% extends "cbtracker/base.html" %}
+
+{% block content %}
+<div class="list-group">
+	{% for tag in list %}
+		<a href="{% url 'issues_by_tag' tag_id=tag.id %}" class="list-group-item">
+			{{tag.name}}
+		</a>
+	{% endfor %}
+</div>
+{% endblock %}

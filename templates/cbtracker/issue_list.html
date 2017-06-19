@@ -57,7 +57,11 @@
 			</td>
 			{% if wantlist %}
 				<td>
-					{% if issue.ordered %}
+					{% if issue.might_own %}
+						<input id="bought{{issue.id}}" type="button" value="Found" class="btn btn-warning btn-xs" onclick="buy({{issue.id}});" />
+					{% elif issue.pulled %}
+						<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-info btn-xs" onclick="buy({{issue.id}});" />
+					{% elif issue.ordered %}
 						<input id="bought{{issue.id}}" type="button" value="Received" class="btn btn-warning btn-xs" onclick="buy({{issue.id}});" />
 					{% else %}
 						<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
@@ -199,7 +203,9 @@
 						{% endif %}
 					</td>
 					<td class='target-price'>
-						{% if issue.ordered %}
+						{% if issue.might_own %}
+							<input id="bought{{issue.id}}" type="button" value="Found" class="btn btn-info btn-xs" onclick="buy({{issue.id}});" />
+						{% elif issue.ordered %}
 							<input id="bought{{issue.id}}" type="button" value="Received" class="btn btn-warning btn-xs" onclick="buy({{issue.id}});" />
 						{% else %}
 							<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
@@ -268,7 +274,21 @@
 					</span>
 			</td>
 			<td class='target-price'>
-				<input id="boughtG{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
+
+
+				{% if issue.might_own %}
+					<input id="boughtG{{issue.id}}" type="button" value="Found" class="btn btn-info btn-xs" onclick="buy({{issue.id}});" />
+				{% elif issue.ordered %}
+					<input id="boughtG{{issue.id}}" type="button" value="Received" class="btn btn-warning btn-xs" onclick="buy({{issue.id}});" />
+				{% else %}
+					<input id="boughtG{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
+				{% endif %}
+
+
+
+
+
+
 				{% endif %}
 			</td>
 		</tr>

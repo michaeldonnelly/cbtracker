@@ -20,6 +20,11 @@ urlpatterns = [
     url(r'^author/$', views.AuthorList.as_view(), name='author_list'),
 	url(r'^author/(?P<author_id>\d+)/$', views.IssueList.as_view(), name='issues_by_author'),
 
+	# Tag
+    url(r'^tag/$', views.TagList.as_view(), name='tag_list'),
+	url(r'^tag/(?P<tag_id>\d+)/$', views.IssueList.as_view(), name='issues_by_tag'),
+	
+	
 	# Group
     url(r'^seriesGroup/$', views.SeriesGrouperList.as_view(), name='series_grouper_list'),
 	url(r'^seriesGroup/(?P<seriesGrouper_id>\d+)/$', views.IssueList.as_view(), name='issues_by_group'),
