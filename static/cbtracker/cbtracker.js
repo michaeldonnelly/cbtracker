@@ -39,6 +39,10 @@ $('#showFarOut').change(function () {
     $('.far-out').toggle();
 });
 
+$('#showPulled').change(function () {
+    $('.pulled').toggle();
+});
+
 $('.collapser').click(function () {
     $('.row-' + this.id).toggle();
 });
