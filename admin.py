@@ -38,7 +38,14 @@ def not_wanted(modeladmin, request, queryset):
 not_wanted.short_description = "Not Wanted"
 
 # Admin Screens
-class SeriesAdmin(admin.ModelAdmin):
+class SeriesResource(resources.ModelResource):
+	class Meta:
+		model = Series
+		skip_unchanged = True
+		report_skipped = False
+		
+#class SeriesAdmin(admin.ModelAdmin):
+class SeriesAdmin(ImportExportModelAdmin):
 	list_display = ['name', 'publisher', 'seriesGrouper', 'updated', 'created']
 	list_filter = ['current', 'pullList', 'publisher', 'tags']
 	actions = [add_to_pulllist, remove_from_pulllist, make_not_current, tag_xmen]
