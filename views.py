@@ -29,6 +29,7 @@ class Wantlist(ListView):
 	template = 'cbtracker/issue_list.html'
 	current = True
 	backissues = True
+	dollar = False
 	
 	def get(self, request, *args, **kwargs):
 		include = request.GET.get('include')
@@ -36,6 +37,9 @@ class Wantlist(ListView):
 			self.backissues = False
 		elif include == 'back':
 			self.current = False
+		price = request.GET.get('price')
+		if price == 'dollar':
+			self.dollar = True
 		response = super(Wantlist, self).get(request, *args, **kwargs)
 		return response
 	
