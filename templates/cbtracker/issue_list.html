@@ -5,11 +5,19 @@
 {% if current %}
 	<div class="container">
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-5">
 				<h2>Current</h2>
 			</div>
-			<div class="col-md-2">
+			<!--
+			<div class="col-md-3">
+				<div class="checkbox alert alert-info">
+					<label class="">
+						<input type="checkbox" id="showPulled" checked>
+						Show pull list
+					</label>
+				</div>
 			</div>
+			-->
 			<div class="col-md-4" align="center">
 				<div class="checkbox alert alert-info">
 					<label class="">
@@ -33,6 +41,7 @@
 		{% for issue in current %}
 		<tr id="r{{issue.id}}" 
 			{% if issue.far_out %} class="far-out" {% endif %}
+			{% if issue.pulled %} class="pulled" {% endif %}
 		>
 			<td class='seriesTitle'>
 				<a href="{% url 'issues_by_series' series_id=issue.series.id %}">
@@ -61,10 +70,10 @@
 				<td>
 					{% if issue.might_own %}
 						<input id="bought{{issue.id}}" type="button" value="Found" class="btn btn-warning btn-xs" onclick="buy({{issue.id}});" />
-					{% elif issue.pulled %}
-						<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-info btn-xs" onclick="buy({{issue.id}});" />
 					{% elif issue.ordered %}
 						<input id="bought{{issue.id}}" type="button" value="Received" class="btn btn-warning btn-xs" onclick="buy({{issue.id}});" />
+					{% elif issue.pulled %}
+						<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-info btn-xs" onclick="buy({{issue.id}});" />
 					{% else %}
 						<input id="bought{{issue.id}}" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy({{issue.id}});" />
 					{% endif %}
