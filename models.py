@@ -29,7 +29,7 @@ class Series(models.Model):
 	tags = models.ManyToManyField(Tag, blank=True)
 
 	def latest_issue(self):
-		return Issue.objects.filter(series=self).first()
+		return Issue.objects.filter(series=self).last()
 	
 	class Meta:
 		verbose_name_plural = 'series'
@@ -115,7 +115,7 @@ class Issue(models.Model):
 		
 	def issue_author(self):
 		if self.author:
-			return author
+			return self.author
 		return self.series.author
 		
 	def pulled(self):
@@ -131,7 +131,6 @@ class Issue(models.Model):
 		if author:
 			if author.pullList:
 				return True
-
 		
 	def cover_date(self):
 		return date_ym(self.cover_year, self.cover_month)
@@ -170,7 +169,9 @@ class Issue(models.Model):
 		return self.release_delta() < datetime.timedelta(days = -90)	
 
 	class Meta:
-		ordering = ['-cover_year', '-cover_month', '-issue_number']
+		#ordering = ['release_year', 'release_month', 'release_day', 'series__sort_name', 'issue_number']
+		#ordering = ['-cover_year', '-cover_month', '-issue_number']
+		ordering = ['series__sort_name', 'issue_number']
 
 	def __str__(self):
 		name = self.series.name
