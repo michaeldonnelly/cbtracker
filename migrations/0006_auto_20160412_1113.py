@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
                 ('volume', models.IntegerField()),
                 ('own', models.BooleanField(default='true')),
-                ('series', models.ForeignKey(to='cbtracker.Series')),
+                ('series', models.ForeignKey('cbtracker.Series', models.SET_NULL)),
             ],
         ),
         migrations.AlterModelOptions(

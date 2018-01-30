@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('issue', models.ForeignKey(to='cbtracker.Issue')),
+                ('issue', models.ForeignKey('cbtracker.Issue', models.SET_NULL)),
             ],
         ),
         migrations.CreateModel(
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('series', models.ForeignKey(to='cbtracker.Series')),
+                ('series', models.ForeignKey('cbtracker.Series', models.SET_NULL)),
             ],
         ),
         migrations.CreateModel(
@@ -44,11 +44,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='seriestag',
             name='tag',
-            field=models.ForeignKey(to='cbtracker.Tag'),
+            field=models.ForeignKey('cbtracker.Tag', models.SET_NULL),
         ),
         migrations.AddField(
             model_name='issuetag',
             name='tag',
-            field=models.ForeignKey(to='cbtracker.Tag'),
+            field=models.ForeignKey('cbtracker.Tag', models.SET_NULL),
         ),
     ]

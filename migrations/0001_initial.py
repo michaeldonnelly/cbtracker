@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 ('price_source', models.CharField(max_length=100, blank=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('author', models.ForeignKey(to='cbtracker.Author', blank=True, null=True)),
+                ('author', models.ForeignKey('cbtracker.Author', models.SET_NULL, blank=True, null=True)),
             ],
             options={
                 'ordering': ['-release_year', '-release_month', '-release_day', '-issue_number'],
@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('imprint_of', models.ForeignKey(to='cbtracker.Publisher', blank=True, null=True)),
+                ('imprint_of', models.ForeignKey('cbtracker.Publisher', models.SET_NULL, blank=True, null=True)),
             ],
             options={
                 'ordering': ['name'],
@@ -78,8 +78,8 @@ class Migration(migrations.Migration):
                 ('current', models.BooleanField(default=False)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
-                ('author', models.ForeignKey(to='cbtracker.Author', blank=True, null=True)),
-                ('publisher', models.ForeignKey(to='cbtracker.Publisher', blank=True, null=True)),
+                ('author', models.ForeignKey('cbtracker.Author', models.SET_NULL, blank=True, null=True)),
+                ('publisher', models.ForeignKey('cbtracker.Publisher', models.SET_NULL, blank=True, null=True)),
             ],
             options={
                 'ordering': ['name', 'start_year'],
@@ -101,21 +101,21 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='series',
             name='seriesGrouper',
-            field=models.ForeignKey(to='cbtracker.SeriesGrouper', blank=True, null=True),
+            field=models.ForeignKey('cbtracker.SeriesGrouper', models.SET_NULL, blank=True, null=True),
         ),
         migrations.AddField(
             model_name='list',
             name='series',
-            field=models.ManyToManyField(to='cbtracker.Series', blank=True),
+            field=models.ManyToManyField('cbtracker.Series', models.SET_NULL, blank=True),
         ),
         migrations.AddField(
             model_name='issue',
             name='publisher',
-            field=models.ForeignKey(to='cbtracker.Publisher', blank=True, null=True),
+            field=models.ForeignKey('cbtracker.Publisher', models.SET_NULL, blank=True, null=True),
         ),
         migrations.AddField(
             model_name='issue',
             name='series',
-            field=models.ForeignKey(to='cbtracker.Series'),
+            field=models.ForeignKey('cbtracker.Series', models.SET_NULL),
         ),
     ]

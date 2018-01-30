@@ -16,13 +16,13 @@ class Tag(models.Model):
 class Series(models.Model):
 	name = models.CharField(max_length=200)
 	sort_name = models.CharField(max_length=200)
-	author = models.ForeignKey('Author', null=True, blank=True)
+	author = models.ForeignKey('Author', models.SET_NULL, null=True, blank=True)
 	volume = models.IntegerField(null=True, blank=True)
-	publisher = models.ForeignKey('Publisher', null=True, blank=True)
+	publisher = models.ForeignKey('Publisher', models.SET_NULL, null=True, blank=True)
 	start_year = models.IntegerField()
 	current = models.BooleanField(default=False)
 	pullList = models.BooleanField(default=False)
-	seriesGrouper = models.ForeignKey('SeriesGrouper', null=True, blank=True)
+	seriesGrouper = models.ForeignKey('SeriesGrouper', models.SET_NULL, null=True, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
 	#finalIssue = models.IntegerField(null=True, blank=True)
@@ -84,7 +84,7 @@ def date_ymd(year, month, day):
 	return date
 
 class Issue(models.Model):
-	series = models.ForeignKey('Series')
+	series = models.ForeignKey('Series', models.PROTECT)
 	issue_number = models.IntegerField()
 	reading_order = models.IntegerField(null=True, blank=True)	
 	annual = models.BooleanField(default=False)
@@ -104,8 +104,8 @@ class Issue(models.Model):
 	variant = models.CharField(max_length=100, blank=True)
 	story_name = models.CharField(max_length=100, blank=True)
 	story_part = models.IntegerField(null=True, blank=True)
-	author = models.ForeignKey('Author', null=True, blank=True)
-	publisher = models.ForeignKey('Publisher', null=True, blank=True)
+	author = models.ForeignKey('Author', models.SET_NULL, null=True, blank=True)
+	publisher = models.ForeignKey('Publisher', models.SET_NULL, null=True, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
 	tags = models.ManyToManyField(Tag, blank=True)
@@ -192,7 +192,7 @@ class Author(models.Model):
 	
 class Publisher(models.Model):
 	name = models.CharField(max_length=100)
-	imprint_of = models.ForeignKey('self', null=True, blank=True)
+	imprint_of = models.ForeignKey('self', models.SET_NULL, null=True, blank=True)
 	updated = models.DateTimeField(auto_now=True)
 	created = models.DateTimeField(auto_now_add=True)
 	
@@ -206,7 +206,7 @@ class Publisher(models.Model):
 		return pub 
 		
 class Trade(models.Model):
-	series = models.ForeignKey('Series')
+	series = models.ForeignKey('Series', models.PROTECT)
 	volume = models.IntegerField()
 	own = models.BooleanField(default='true')
 	title = models.CharField(max_length=200, null=True, blank=True)
