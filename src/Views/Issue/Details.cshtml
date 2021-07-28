@@ -1,0 +1,191 @@
+﻿@model ComicBookTracker.Models.Issue
+
+@{
+    ViewData["Title"] = "Issues";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+
+<div>
+    <h4>Issue</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IssueNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.IssueNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Own)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Own)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReleaseDay)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReleaseDay)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReleaseMonth)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReleaseMonth)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReleaseYear)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReleaseYear)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Variant)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Variant)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StoryName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StoryName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.StoryPart)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.StoryPart)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FairPrice)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FairPrice)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PriceSource)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PriceSource)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Updated)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Updated)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CoverMonth)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CoverMonth)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CoverYear)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CoverYear)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Ordered)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Ordered)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Want)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Want)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Annual)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Annual)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ReadingOrder)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ReadingOrder)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Special)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Special)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PullList)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PullList)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MightOwn)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MightOwn)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MagazineSize)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MagazineSize)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Author.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Publisher)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Publisher.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Series)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Series.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Tags)
+        </dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (Tag tag in Model.Tags)
+                {
+    <li>@tag.Name</li>
+}
+            </ul>
+        </dd>
+      
+    </dl>
+</div>
+
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+</body>
+</html>

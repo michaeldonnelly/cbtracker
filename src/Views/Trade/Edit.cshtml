@@ -1,0 +1,70 @@
+﻿@model ComicBookTracker.Models.Trade
+
+@{
+    ViewData["Title"] = "Trades";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<h4>Trade</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Volume" class="control-label"></label>
+                <input asp-for="Volume" class="form-control" />
+                <span asp-validation-for="Volume" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Own" /> @Html.DisplayNameFor(model => model.Own)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseMonth" class="control-label"></label>
+                <input asp-for="ReleaseMonth" class="form-control" />
+                <span asp-validation-for="ReleaseMonth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseYear" class="control-label"></label>
+                <input asp-for="ReleaseYear" class="form-control" />
+                <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Binding" class="control-label"></label>
+                <select asp-for="Binding" class="form-control"></select>
+                <span asp-validation-for="Binding" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SeriesId" class="control-label"></label>
+                <select asp-for="SeriesId" class="form-control" asp-items="ViewBag.SeriesId"></select>
+                <span asp-validation-for="SeriesId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+</body>
+</html>

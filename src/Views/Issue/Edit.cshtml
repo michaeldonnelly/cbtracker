@@ -1,0 +1,160 @@
+﻿@model ComicBookTracker.Models.Issue
+
+@{
+    ViewData["Title"] = "Issues";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<h4>Issue</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="IssueNumber" class="control-label"></label>
+                <input asp-for="IssueNumber" class="form-control" />
+                <span asp-validation-for="IssueNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Own" class="control-label"></label>
+                <input asp-for="Own" class="form-control" />
+                <span asp-validation-for="Own" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseDay" class="control-label"></label>
+                <input asp-for="ReleaseDay" class="form-control" />
+                <span asp-validation-for="ReleaseDay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseMonth" class="control-label"></label>
+                <input asp-for="ReleaseMonth" class="form-control" />
+                <span asp-validation-for="ReleaseMonth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseYear" class="control-label"></label>
+                <input asp-for="ReleaseYear" class="form-control" />
+                <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Variant" class="control-label"></label>
+                <input asp-for="Variant" class="form-control" />
+                <span asp-validation-for="Variant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StoryName" class="control-label"></label>
+                <input asp-for="StoryName" class="form-control" />
+                <span asp-validation-for="StoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StoryPart" class="control-label"></label>
+                <input asp-for="StoryPart" class="form-control" />
+                <span asp-validation-for="StoryPart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FairPrice" class="control-label"></label>
+                <input asp-for="FairPrice" class="form-control" />
+                <span asp-validation-for="FairPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceSource" class="control-label"></label>
+                <input asp-for="PriceSource" class="form-control" />
+                <span asp-validation-for="PriceSource" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Updated" class="control-label"></label>
+                <input asp-for="Updated" class="form-control" />
+                <span asp-validation-for="Updated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Created" class="control-label"></label>
+                <input asp-for="Created" class="form-control" />
+                <span asp-validation-for="Created" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AuthorId" class="control-label"></label>
+                <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
+                <span asp-validation-for="AuthorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublisherId" class="control-label"></label>
+                <select asp-for="PublisherId" class="form-control" asp-items="ViewBag.PublisherId"></select>
+                <span asp-validation-for="PublisherId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SeriesId" class="control-label"></label>
+                <select asp-for="SeriesId" class="form-control" asp-items="ViewBag.SeriesId"></select>
+                <span asp-validation-for="SeriesId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoverMonth" class="control-label"></label>
+                <input asp-for="CoverMonth" class="form-control" />
+                <span asp-validation-for="CoverMonth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CoverYear" class="control-label"></label>
+                <input asp-for="CoverYear" class="form-control" />
+                <span asp-validation-for="CoverYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ordered" class="control-label"></label>
+                <input asp-for="Ordered" class="form-control" />
+                <span asp-validation-for="Ordered" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Want" class="control-label"></label>
+                <input asp-for="Want" class="form-control" />
+                <span asp-validation-for="Want" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Annual" class="control-label"></label>
+                <input asp-for="Annual" class="form-control" />
+                <span asp-validation-for="Annual" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReadingOrder" class="control-label"></label>
+                <input asp-for="ReadingOrder" class="form-control" />
+                <span asp-validation-for="ReadingOrder" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Special" class="control-label"></label>
+                <input asp-for="Special" class="form-control" />
+                <span asp-validation-for="Special" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PullList" class="control-label"></label>
+                <input asp-for="PullList" class="form-control" />
+                <span asp-validation-for="PullList" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MightOwn" class="control-label"></label>
+                <input asp-for="MightOwn" class="form-control" />
+                <span asp-validation-for="MightOwn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MagazineSize" class="control-label"></label>
+                <input asp-for="MagazineSize" class="form-control" />
+                <span asp-validation-for="MagazineSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+</body>
+</html>

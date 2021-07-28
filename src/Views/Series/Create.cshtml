@@ -1,0 +1,82 @@
+﻿@model ComicBookTracker.Models.Series
+
+@{
+    ViewData["Title"] = "Series";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+
+<h4>Series</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Volume" class="control-label"></label>
+                <input asp-for="Volume" class="form-control" />
+                <span asp-validation-for="Volume" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartYear" class="control-label"></label>
+                <input asp-for="StartYear" class="form-control" />
+                <span asp-validation-for="StartYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Current" class="control-label"></label>
+                <input asp-for="Current" class="form-control" />
+                <span asp-validation-for="Current" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Updated" class="control-label"></label>
+                <input asp-for="Updated" class="form-control" />
+                <span asp-validation-for="Updated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Created" class="control-label"></label>
+                <input asp-for="Created" class="form-control" />
+                <span asp-validation-for="Created" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AuthorId" class="control-label"></label>
+                <select asp-for="AuthorId" class ="form-control" asp-items="ViewBag.AuthorId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublisherId" class="control-label"></label>
+                <select asp-for="PublisherId" class ="form-control" asp-items="ViewBag.PublisherId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SortName" class="control-label"></label>
+                <input asp-for="SortName" class="form-control" />
+                <span asp-validation-for="SortName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PullList" class="control-label"></label>
+                <input asp-for="PullList" class="form-control" />
+                <span asp-validation-for="PullList" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+</body>
+</html>

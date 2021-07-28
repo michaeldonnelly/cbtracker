@@ -1,0 +1,127 @@
+﻿@model IEnumerable<ComicBookTracker.Models.Issue>
+
+@functions{
+    bool WishList()
+    {
+        if (ViewData["Wishlist"] == null)
+        {
+            return false;
+        }
+        string wishList = ViewData["Wishlist"].ToString();
+        if (string.IsNullOrEmpty(wishList))
+        {
+            return false;
+        }
+
+        return (wishList == true.ToString());
+    }
+
+    string RowStyle(Issue issue)
+    {
+        if (WishList())
+        {
+            return "";
+        }
+        if (issue.Own)
+        {
+            return "";
+        }
+        if (issue.Ordered)
+        {
+            return "background:yellow";
+        }
+        else
+        {
+            return "background:#fef0f0";
+        }
+    }
+
+    string RowId(Issue issue)
+    {
+        return "r" + issue.Id.ToString();
+    }
+
+    string BoughtButtonId(Issue issue)
+    {
+        return "bought" + issue.Id.ToString();
+    }
+}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Issue
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Story
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FairPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+        <tr id="@RowId(item)" style="@RowStyle(item)">
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id">@item.ToString()</a>
+                @Html.DisplayFor(modelItem => item.Variant)
+            </td>
+            <td>
+                @item.ReleaseDateString()
+            </td>
+            <td>
+                @item.Story()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FairPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author.Name)
+            </td>
+            @if (WishList())
+            {
+                <td>
+                    @if (item.MightOwn)
+                    {
+                        <input id="@BoughtButtonId(item)" type="button" value="Found" class="btn btn-warning btn-xs" onclick="buy(@item.Id);" />
+                    }
+                    else if (item.Ordered)
+                    {
+                        <input id="@BoughtButtonId(item)" type="button" value="Received" class="btn btn-warning btn-xs" onclick="buy(@item.Id);" />
+                    }
+                    else if (item.PullList)
+                    {
+                        <input id="@BoughtButtonId(item)" type="button" value="Bought" class="btn btn-info btn-xs" onclick="buy(@item.Id);" />
+                    }
+                    else
+                    {
+                        <input id="@BoughtButtonId(item)" type="button" value="Bought" class="btn btn-success btn-xs" onclick="buy(@item.Id);" />
+                    }
+                </td>
+            }
+            else
+            {
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action = "Details" asp-route-id = "@item.Id" > Details </a> |
+                    <a asp-action = "Delete" asp-route-id = "@item.Id" > Delete </a>
+                </td>
+            }
+        </tr>
+        }
+    </tbody>
+</table>

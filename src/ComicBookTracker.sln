@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.810.6
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComicBookTracker", "ComicBookTracker.csproj", "{52E7AF7E-3D7E-493D-8E91-D00CADEB696B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52E7AF7E-3D7E-493D-8E91-D00CADEB696B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52E7AF7E-3D7E-493D-8E91-D00CADEB696B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52E7AF7E-3D7E-493D-8E91-D00CADEB696B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52E7AF7E-3D7E-493D-8E91-D00CADEB696B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E8F52497-BF60-4DC7-84FC-166EA993A1F5}
+	EndGlobalSection
+EndGlobal

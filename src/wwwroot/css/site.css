@@ -1,0 +1,205 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px; /* Vertically center the text there */
+}
+
+/* ComicBookTracker styles
+-------------------------------------------------- */
+.doNotOwn {
+    background: #fef0f0;
+}
+
+.far-out {
+    display: none;
+}
+
+.invisible {
+    display: invisible;
+}
+
+
+.navbar-blue {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+    .navbar-blue .navbar-brand {
+        color: #777;
+    }
+
+        .navbar-blue .navbar-brand:hover,
+        .navbar-blue .navbar-brand:focus {
+            color: #5e5e5e;
+            background-color: transparent;
+        }
+
+    .navbar-blue .navbar-text {
+        color: #777;
+    }
+
+    .navbar-blue .navbar-nav > li > a {
+        color: #777;
+    }
+
+        .navbar-blue .navbar-nav > li > a:hover,
+        .navbar-blue .navbar-nav > li > a:focus {
+            color: #333;
+            background-color: transparent;
+        }
+
+    .navbar-blue .navbar-nav > .active > a,
+    .navbar-blue .navbar-nav > .active > a:hover,
+    .navbar-blue .navbar-nav > .active > a:focus {
+        color: #555;
+        background-color: #c9ddff;
+    }
+
+    .navbar-blue .navbar-nav > .disabled > a,
+    .navbar-blue .navbar-nav > .disabled > a:hover,
+    .navbar-blue .navbar-nav > .disabled > a:focus {
+        color: #ccc;
+        background-color: transparent;
+    }
+
+    .navbar-blue .navbar-toggle {
+        border-color: #ddd;
+    }
+
+        .navbar-blue .navbar-toggle:hover,
+        .navbar-blue .navbar-toggle:focus {
+            background-color: #ddd;
+        }
+
+        .navbar-blue .navbar-toggle .icon-bar {
+            background-color: #888;
+        }
+
+    .navbar-blue .navbar-collapse,
+    .navbar-blue .navbar-form {
+        border-color: #e7e7e7;
+    }
+
+    .navbar-blue .navbar-nav > .open > a,
+    .navbar-blue .navbar-nav > .open > a:hover,
+    .navbar-blue .navbar-nav > .open > a:focus {
+        color: #555;
+        background-color: #c9ddff;
+    }
+
+@media (max-width: 767px) {
+    .navbar-blue .navbar-nav .open .dropdown-menu > li > a {
+        color: #777;
+    }
+
+        .navbar-blue .navbar-nav .open .dropdown-menu > li > a:hover,
+        .navbar-blue .navbar-nav .open .dropdown-menu > li > a:focus {
+            color: #333;
+            background-color: transparent;
+        }
+
+    .navbar-blue .navbar-nav .open .dropdown-menu > .active > a,
+    .navbar-blue .navbar-nav .open .dropdown-menu > .active > a:hover,
+    .navbar-blue .navbar-nav .open .dropdown-menu > .active > a:focus {
+        color: #555;
+        background-color: #e7e7e7;
+    }
+
+    .navbar-blue .navbar-nav .open .dropdown-menu > .disabled > a,
+    .navbar-blue .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+    .navbar-blue .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+        color: #ccc;
+        background-color: transparent;
+    }
+}
+
+.navbar-blue .navbar-link {
+    color: #777;
+}
+
+    .navbar-blue .navbar-link:hover {
+        color: #333;
+    }
+
+.navbar-blue .btn-link {
+    color: #777;
+}
+
+    .navbar-blue .btn-link:hover,
+    .navbar-blue .btn-link:focus {
+        color: #333;
+    }
+
+    .navbar-blue .btn-link[disabled]:hover,
+    fieldset[disabled] .navbar-blue .btn-link:hover,
+    .navbar-blue .btn-link[disabled]:focus,
+    fieldset[disabled] .navbar-blue .btn-link:focus {
+        color: #ccc;
+    }
